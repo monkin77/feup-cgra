@@ -29,6 +29,9 @@ export class MyInterface extends CGFinterface {
         // Diamond element
         this.gui.add(this.scene, 'displayDiamond').name('Display Diamond');
 
+        // Parallelogram element
+        this.gui.add(this.scene, 'displayParallelogram').name('Display Parallel...');
+
         return true;
     }
 }

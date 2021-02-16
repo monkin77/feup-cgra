@@ -20,7 +20,7 @@ export class MyTriangle extends CGFobject {
 
         //Counter-clockwise reference of vertices
 		this.indices = [
-			0, 1, 2,
+			0, 1, 2,            // only painted in one side
 		];
 
         //The defined indices (and corresponding vertices)
