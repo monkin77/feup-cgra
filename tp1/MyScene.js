@@ -33,6 +33,7 @@ export class MyScene extends CGFscene {
     this.displayAxis = true;
     this.scaleFactor = 1;
     this.displayTriangle = true;
+    this.displayDiamond = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -94,7 +95,7 @@ export class MyScene extends CGFscene {
 
     // ---- BEGIN Primitive drawing section
 
-    this.diamond.display();
+    if(this.displayDiamond) this.diamond.display();
     if(this.displayTriangle) this.triangle.display();
     
     // ---- END Primitive drawing section
