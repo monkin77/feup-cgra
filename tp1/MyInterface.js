@@ -16,7 +16,7 @@ export class MyInterface extends CGFinterface {
         // init GUI. For more information on the methods, check:
         // https://github.com/dataarts/dat.gui/blob/master/API.md
         this.gui = new dat.GUI();
-
+        
         //Checkbox element in GUI
         this.gui.add(this.scene, 'displayAxis').name('Display Axis');
 
@@ -31,6 +31,12 @@ export class MyInterface extends CGFinterface {
 
         // Parallelogram element
         this.gui.add(this.scene, 'displayParallelogram').name('Display Parallel...');
+
+        // Small Triangle element
+        this.gui.add(this.scene, 'displaySmallTriangle').name('Display Small T');       // The gui does not have space for the full name
+
+        // Big Triangle element
+        this.gui.add(this.scene, 'displayBigTriangle').name('Display Big T');
 
         return true;
     }
