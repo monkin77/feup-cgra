@@ -31,13 +31,14 @@ export class MyScene extends CGFscene {
     this.axis = new CGFaxis(this);
     this.greenDiamond = new MyDiamond(this);
     this.pinkTriangle = new MyTriangleSmall(this);
+    this.orangeTriangle = new MyTriangleSmall(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
     this.displayGreenDiamond = true;
     this.displayPinkTriangle = true;
-
+    this.displayOrangeTriangle = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -69,10 +70,10 @@ export class MyScene extends CGFscene {
     this.updateProjectionMatrix();
     this.loadIdentity();
 
-    this.pushMatrix();  //push Identity Matrix
-
     // Apply transformations corresponding to the camera position relative to the origin
     this.applyViewMatrix();
+
+    this.pushMatrix();  //push Identity Matrix
 
     // Draw axis
     if (this.displayAxis) this.axis.display();
@@ -98,10 +99,10 @@ export class MyScene extends CGFscene {
       1.0,
     ];
     
-    var scaleGreenDiamond = [   //0.707 = 1 / sqrt(2) porque o lado do MyDiamond é sqrt(2)
-      0.707, 0.0, 0.0, 0.0,
-      0.0, 0.707, 0.0, 0.0,
-      0.0, 0.0, 0.707, 0.0,
+    var scaleGreenDiamond = [   //o lado do MyDiamond é sqrt(2)
+      1/Math.sqrt(2), 0.0, 0.0, 0.0,
+      0.0, 1/Math.sqrt(2), 0.0, 0.0,
+      0.0, 0.0, 1/Math.sqrt(2), 0.0,
       0.0, 0.0, 0.0, 1,
     ]
     
@@ -109,19 +110,19 @@ export class MyScene extends CGFscene {
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
-      0, 0.707, 0, 1
+      Math.sqrt(2)/2, 0, 0, 1
     ]
 
     const rotateGreenDiamondAngle = - 90*Math.PI / 180;
-    
+    /*
     var rotateGreenDiamond = [
       Math.cos(rotateGreenDiamondAngle), Math.sin(rotateGreenDiamondAngle), 0, 0,
       -Math.sin(rotateGreenDiamondAngle), Math.cos(rotateGreenDiamondAngle), 0, 0,
       0, 0, 1, 0,
       0, 0, 0, 1
-    ]
+    ]*/
 
-    this.multMatrix(rotateGreenDiamond);
+    //this.multMatrix(rotateGreenDiamond);
     this.multMatrix(translateGreenDiamond);
     this.multMatrix(scaleGreenDiamond);   
 
@@ -129,9 +130,10 @@ export class MyScene extends CGFscene {
     if(this.displayGreenDiamond) this.greenDiamond.display(); //draw object with transformations
 
     this.popMatrix();   //reset to old matrix
-    
+  
+
+    //Start drawing pink Triangle
     this.pushMatrix();
-    this.applyViewMatrix();
 
     var translatePinkTriangle = [   
       1, 0, 0, 0,
@@ -141,15 +143,46 @@ export class MyScene extends CGFscene {
     ]
 
     this.multMatrix(translatePinkTriangle);
-    //Start Drawing Pink Triangle
+
     if (this.displayPinkTriangle) this.pinkTriangle.display();
     
     this.popMatrix();
 
-    this.pushMatrix();
-    this.applyViewMatrix();
 
+    //Start Drawing Orange Triangle
+    this.pushMatrix();
     
+    var scaleOrangeTriangle = [
+      Math.sqrt(2), 0.0, 0.0, 0.0,
+      0.0, Math.sqrt(2), 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2), 0.0,
+      0.0, 0.0, 0.0, 1
+    ]
+
+    const rotateOrangeTriangleAngle = - 90*Math.PI / 180;
+
+    var rotateOrangeTriangle = [
+      Math.cos(rotateOrangeTriangleAngle), Math.sin(rotateOrangeTriangleAngle), 0, 0,
+      -Math.sin(rotateOrangeTriangleAngle), Math.cos(rotateOrangeTriangleAngle), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]
+
+    var translateOrangeTriangle = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      -Math.sqrt(2)/2, Math.sqrt(2)/2, 0, 1
+    ]
+    
+    this.multMatrix(translateOrangeTriangle);
+    this.multMatrix(rotateOrangeTriangle);
+    this.multMatrix(scaleOrangeTriangle);
+
+    if (this.displayOrangeTriangle) this.orangeTriangle.display();
+
+    this.popMatrix();
+
     // ---- BEGIN Primitive drawing section
 
     // ---- END Primitive drawing section
