@@ -5,6 +5,7 @@ import { MyParallelogram } from "./MyParallelogram.js";
 import {MyTriangleSmall} from "./MyTriangleSmall.js";
 import {MyTriangleBig} from "./MyTriangleBig.js";
 import { MyTangram } from "./MyTangram.js";
+import { MyUnitCube } from "./MyUnitCube.js";
 
 /**
  * MyScene
@@ -31,13 +32,18 @@ export class MyScene extends CGFscene {
     //Initialize scene objects
     
     this.axis = new CGFaxis(this);
+    
     this.tangram = new MyTangram(this);
+    this.myUnitCube = new MyUnitCube(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
+
     this.scaleFactor = 1;
 
     this.displayTangram = true;
+    this.displayUnitCube = true;
+
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -101,6 +107,51 @@ export class MyScene extends CGFscene {
     
     this.multMatrix(sca);
 
-    this.tangram.display();
+    //this.tangram.display();
+
+    this.popMatrix();
+
+    //-------------------------------------- Drawing Cube -----------------------------
+    this.pushMatrix();
+
+    var translateFigure = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0.5, 0, 0.5, 1
+    ]
+
+    const rotateFigureAngle = -90*Math.PI / 180;
+
+    var rotateFigure = [
+      1, 0, 0, 0,
+      0, Math.cos(rotateFigureAngle), Math.sin(rotateFigureAngle), 0,
+      0, -Math.sin(rotateFigureAngle), Math.cos(rotateFigureAngle), 0,
+      0, 0, 0, 1
+    ]
+
+    this.multMatrix(translateFigure); //rodar figura, depois transladar para a origem o ponto superior esquerdo do cubo
+    this.multMatrix(rotateFigure);
+
+    this.tangram.display(); //rodei e desenhei
+
+    var translateCube = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      0, 0, -0.5, 1
+    ];
+
+    this.multMatrix(translateCube); // O cubo precisava de + transformaçoes entao so desenho depois das transformações todas
+
+    if (this.displayUnitCube) this.myUnitCube.display();
+
+    this.popMatrix();
+    
+    //--------------------------------------Tranforming New Figure----------------------------
+    this.pushMatrix();
+    
+
+    this.popMatrix();
   }
 }

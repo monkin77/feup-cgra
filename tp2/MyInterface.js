@@ -23,30 +23,9 @@ export class MyInterface extends CGFinterface {
         //Slider element in GUI
         this.gui.add(this.scene, 'scaleFactor', 0.1, 5).name('Scale Factor');
 
-        /*
-        //Display Green Diamond
-        this.gui.add(this.scene, 'displayGreenDiamond').name('Display Green');
+        //this.gui.add(this.scene, 'displayTangram').name('Display Tangram');
 
-        //Display Pink Triangle
-        this.gui.add(this.scene, 'displayPinkTriangle').name('Display Pink');
-
-        //Display Orange Triangle
-        this.gui.add(this.scene, 'displayOrangeTriangle').name('Display Orange');
-        
-        //Display Blue Triangle
-        this.gui.add(this.scene, 'displayBlueTriangle').name('Display Blue');
-
-        //Display Red Triangle
-        this.gui.add(this.scene, 'displayRedTriangle').name('Red Triangle');
-
-        //Display Yellow Parallelogram
-        this.gui.add(this.scene, 'displayYellowParallelogram').name('Display Yellow');
-
-        //Display Purple Triangle
-        this.gui.add(this.scene, 'displayPurpleTriangle').name('Display Purple');
-        */
-
-        this.gui.add(this.scene, 'displayTangram').name('Display Tangram');
+        this.gui.add(this.scene, 'displayUnitCube').name('Display Unit Cube');
 
         return true;
     }
