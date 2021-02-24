@@ -32,6 +32,7 @@ export class MyScene extends CGFscene {
     this.greenDiamond = new MyDiamond(this);
     this.pinkTriangle = new MyTriangleSmall(this);
     this.orangeTriangle = new MyTriangleSmall(this);
+    this.blueTriangle = new MyTriangleSmall(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -39,6 +40,7 @@ export class MyScene extends CGFscene {
     this.displayGreenDiamond = true;
     this.displayPinkTriangle = true;
     this.displayOrangeTriangle = true;
+    this.displayBlueTriangle = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -100,9 +102,9 @@ export class MyScene extends CGFscene {
     ];
     
     var scaleGreenDiamond = [   //o lado do MyDiamond é sqrt(2)
-      1/Math.sqrt(2), 0.0, 0.0, 0.0,
-      0.0, 1/Math.sqrt(2), 0.0, 0.0,
-      0.0, 0.0, 1/Math.sqrt(2), 0.0,
+      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
+      0.0, Math.sqrt(2)/2, 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2)/2, 0.0,
       0.0, 0.0, 0.0, 1,
     ]
     
@@ -113,16 +115,6 @@ export class MyScene extends CGFscene {
       Math.sqrt(2)/2, 0, 0, 1
     ]
 
-    const rotateGreenDiamondAngle = - 90*Math.PI / 180;
-    /*
-    var rotateGreenDiamond = [
-      Math.cos(rotateGreenDiamondAngle), Math.sin(rotateGreenDiamondAngle), 0, 0,
-      -Math.sin(rotateGreenDiamondAngle), Math.cos(rotateGreenDiamondAngle), 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
-    ]*/
-
-    //this.multMatrix(rotateGreenDiamond);
     this.multMatrix(translateGreenDiamond);
     this.multMatrix(scaleGreenDiamond);   
 
@@ -183,6 +175,41 @@ export class MyScene extends CGFscene {
 
     this.popMatrix();
 
+    //Start Drawing Blue Triangle
+    
+    this.pushMatrix();
+
+    var scaleBlueTriangle = [
+      Math.sqrt(2), 0.0, 0.0, 0.0,
+      0.0, Math.sqrt(2), 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2), 0.0,
+      0.0, 0.0, 0.0, 1,
+    ]
+
+    const rotateBlueTriangleAngle = - 45*Math.PI / 180;
+
+    var rotateBlueTriangle = [
+      Math.cos(rotateBlueTriangleAngle), Math.sin(rotateBlueTriangleAngle), 0, 0,
+      -Math.sin(rotateBlueTriangleAngle), Math.cos(rotateBlueTriangleAngle), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]
+
+    var translateBlueTriangle = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      -(1 + Math.sqrt(2)/2), (1 - Math.sqrt(2)/2), 0, 1
+    ]
+
+    this.multMatrix(translateBlueTriangle); 
+    this.multMatrix(rotateBlueTriangle);      // The rotation is not being done from the middle of the triangle
+    this.multMatrix(scaleBlueTriangle);
+
+    if(this.displayBlueTriangle) this.blueTriangle.display();
+
+    this.popMatrix();
+    
     // ---- BEGIN Primitive drawing section
 
     // ---- END Primitive drawing section

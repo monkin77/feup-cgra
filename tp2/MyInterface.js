@@ -32,6 +32,8 @@ export class MyInterface extends CGFinterface {
         //Display Orange Triangle
         this.gui.add(this.scene, 'displayOrangeTriangle').name('Display Orange');
         
+        //Display Blue Triangle
+        this.gui.add(this.scene, 'displayBlueTriangle').name('Display Blue');
         return true;
     }
 }
