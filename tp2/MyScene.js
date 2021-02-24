@@ -34,6 +34,7 @@ export class MyScene extends CGFscene {
     this.orangeTriangle = new MyTriangleSmall(this);
     this.blueTriangle = new MyTriangleSmall(this);
     this.yellowParallelogram = new MyParallelogram(this);
+    this.purpleTriangle = new MyTriangleSmall(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -43,6 +44,7 @@ export class MyScene extends CGFscene {
     this.displayOrangeTriangle = true;
     this.displayBlueTriangle = true;
     this.displayYellowParallelogram = true;
+    this.displayPurpleTriangle = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -233,6 +235,48 @@ export class MyScene extends CGFscene {
     this.multMatrix(scaleYellowParallelogram);
 
     if (this.displayYellowParallelogram) this.yellowParallelogram.display();
+
+    this.popMatrix();
+
+    //Start Drawing Purple Triangle
+    this.pushMatrix();
+
+    var scalePurpleTriangle = [
+      Math.sqrt(2)/2, 0, 0, 0,
+      0, Math.sqrt(2)/2, 0, 0,
+      0, 0, Math.sqrt(2)/2, 0,
+      0, 0, 0, 1
+    ]
+
+    const rotatePurpleTriangleAngle = (90 + 45 + 15) * Math.PI / 180;
+
+    var translatePurpleToRotate = [
+      1, 0.0, 0.0, 0.0,
+      0.0, 1, 0.0, 0.0,
+      0.0, 0.0, 1, 0.0,
+      Math.sqrt(2)/2, 0.0, 0.0, 1
+    ]
+
+    var rotatePurpleTriangle = [
+      Math.cos(rotatePurpleTriangleAngle), Math.sin(rotatePurpleTriangleAngle), 0, 0,
+      -Math.sin(rotatePurpleTriangleAngle), Math.cos(rotatePurpleTriangleAngle), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]
+
+    var tranlatePurpleTriangle = [
+      1, 0.0, 0.0, 0.0,
+      0.0, 1, 0.0, 0.0,
+      0.0, 0.0, 1, 0.0,
+      -Math.sqrt(2)/2, 2*Math.sqrt(2) - Math.sqrt(2)/2, 0.0, 1
+    ]
+
+    this.multMatrix(tranlatePurpleTriangle);
+    this.multMatrix(rotatePurpleTriangle);
+    this.multMatrix(translatePurpleToRotate);
+    this.multMatrix(scalePurpleTriangle);
+
+    if(this.displayPurpleTriangle) this.purpleTriangle.display();
 
     this.popMatrix();
   }
