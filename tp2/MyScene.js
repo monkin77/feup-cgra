@@ -5,6 +5,7 @@ import { MyParallelogram } from "./MyParallelogram.js";
 import {MyTriangleSmall} from "./MyTriangleSmall.js";
 import {MyTriangleBig} from "./MyTriangleBig.js";
 import { MyTangram } from "./MyTangram.js";
+import { MyUnitCube } from "./MyUnitCube.js";
 
 /**
  * MyScene
@@ -31,30 +32,18 @@ export class MyScene extends CGFscene {
     //Initialize scene objects
     
     this.axis = new CGFaxis(this);
-    /*
-    this.greenDiamond = new MyDiamond(this);
-    this.pinkTriangle = new MyTriangleSmall(this);
-    this.orangeTriangle = new MyTriangleSmall(this);
-    this.blueTriangle = new MyTriangleSmall(this);
-    this.yellowParallelogram = new MyParallelogram(this);
-    this.redTriangle = new MyTriangleSmall(this);
-    this.purpleTriangle = new MyTriangleSmall(this);
-    */
+    
     this.tangram = new MyTangram(this);
+    this.myUnitCube = new MyUnitCube(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
+
     this.scaleFactor = 1;
-    /*
-    this.displayGreenDiamond = true;
-    this.displayPinkTriangle = true;
-    this.displayOrangeTriangle = true;
-    this.displayBlueTriangle = true;
-    this.displayYellowParallelogram = true;
-    this.displayRedTriangle = true;
-    this.displayPurpleTriangle = true;
-    */
-   this.displayTangram = true;
+
+    this.displayTangram = true;
+    this.displayUnitCube = true;
+
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -120,218 +109,32 @@ export class MyScene extends CGFscene {
 
     this.tangram.display();
 
-    /*
-    var scaleGreenDiamond = [   //o lado do MyDiamond é sqrt(2)
-      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
-      0.0, Math.sqrt(2)/2, 0.0, 0.0,
-      0.0, 0.0, Math.sqrt(2)/2, 0.0,
-      0.0, 0.0, 0.0, 1,
-    ]
-    
-    var translateGreenDiamond = [ 
+    this.popMatrix();
+
+    this.pushMatrix();
+
+    var translateCube = [
       1, 0, 0, 0,
       0, 1, 0, 0,
       0, 0, 1, 0,
-      Math.sqrt(2)/2, 0, 0, 1
-    ]
+      0, 0, -0.5, 1
+    ];
 
-    this.multMatrix(translateGreenDiamond);
-    this.multMatrix(scaleGreenDiamond);   
+    const rotateCubeAngle = -90*Math.PI / 180;
 
-    this.multMatrix(sca);
-    if(this.displayGreenDiamond) this.greenDiamond.display(); //draw object with transformations
-
-    this.popMatrix();   //reset to old matrix
-  
-
-    //Start drawing pink Triangle
-    this.pushMatrix();
-
-    var translatePinkTriangle = [   
+    var rotateCube = [
       1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      0, -1, 0, 1
-    ]
-
-    this.multMatrix(translatePinkTriangle);
-
-    if (this.displayPinkTriangle) this.pinkTriangle.display();
-    
-    this.popMatrix();
-
-
-    //Start Drawing Orange Triangle
-    this.pushMatrix();
-    
-    var scaleOrangeTriangle = [
-      Math.sqrt(2), 0.0, 0.0, 0.0,
-      0.0, Math.sqrt(2), 0.0, 0.0,
-      0.0, 0.0, Math.sqrt(2), 0.0,
-      0.0, 0.0, 0.0, 1
-    ]
-
-    const rotateOrangeTriangleAngle = - 90*Math.PI / 180;
-
-    var rotateOrangeTriangle = [
-      Math.cos(rotateOrangeTriangleAngle), Math.sin(rotateOrangeTriangleAngle), 0, 0,
-      -Math.sin(rotateOrangeTriangleAngle), Math.cos(rotateOrangeTriangleAngle), 0, 0,
-      0, 0, 1, 0,
+      0, Math.cos(rotateCubeAngle), Math.sin(rotateCubeAngle), 0,
+      0, -Math.sin(rotateCubeAngle), Math.cos(rotateCubeAngle), 0,
       0, 0, 0, 1
     ]
 
-    var translateOrangeTriangle = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      -Math.sqrt(2)/2, Math.sqrt(2)/2, 0, 1
-    ]
+    this.multMatrix(rotateCube);
+    this.multMatrix(translateCube);
+
+    if(this.displayUnitCube) this.myUnitCube.display();
+
+    this.popMatrix();
     
-    this.multMatrix(translateOrangeTriangle);
-    this.multMatrix(rotateOrangeTriangle);
-    this.multMatrix(scaleOrangeTriangle);
-
-    if (this.displayOrangeTriangle) this.orangeTriangle.display();
-
-    this.popMatrix();
-
-    //Start Drawing Blue Triangle
-    
-    this.pushMatrix();
-
-    var scaleBlueTriangle = [
-      Math.sqrt(2), 0.0, 0.0, 0.0,
-      0.0, Math.sqrt(2), 0.0, 0.0,
-      0.0, 0.0, Math.sqrt(2), 0.0,
-      0.0, 0.0, 0.0, 1,
-    ]
-
-    const rotateBlueTriangleAngle = - 45*Math.PI / 180;
-
-    var rotateBlueTriangle = [
-      Math.cos(rotateBlueTriangleAngle), Math.sin(rotateBlueTriangleAngle), 0, 0,
-      -Math.sin(rotateBlueTriangleAngle), Math.cos(rotateBlueTriangleAngle), 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
-    ]
-
-    var translateBlueTriangle = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      -(1 + Math.sqrt(2)/2), (1 - Math.sqrt(2)/2), 0, 1
-    ]
-
-    this.multMatrix(translateBlueTriangle); 
-    this.multMatrix(rotateBlueTriangle);      // The rotation is not being done from the middle of the triangle
-    this.multMatrix(scaleBlueTriangle);
-
-    if(this.displayBlueTriangle) this.blueTriangle.display();
-
-    this.popMatrix();
-
-    // Start Drawing Yellow parallelogram
-
-    this.pushMatrix();
-
-    var scaleYellowParallelogram = [
-      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
-      0.0, -Math.sqrt(2)/2, 0.0, 0.0,
-      0.0, 0.0, Math.sqrt(2)/2, 0.0,
-      0.0, 0.0, 0.0, 1,
-    ]
-
-    var translateYellowParallelogram = [
-      1, 0.0, 0.0, 0.0,
-      0.0, 1, 0.0, 0.0,
-      0.0, 0.0, 1, 0.0,
-      -(Math.sqrt(2) + Math.sqrt(2)/2 + 2) , 2 - Math.sqrt(2)/2, 0.0, 1
-    ]
-
-    this.multMatrix(translateYellowParallelogram);
-    this.multMatrix(scaleYellowParallelogram);
-
-    if (this.displayYellowParallelogram) this.yellowParallelogram.display();
-
-    this.popMatrix();
-
-
-    // Start drawing red triangle
-    
-    this.pushMatrix();
-
-    const rotateRedTriangleAngle = 15*Math.PI / 180;
-
-    var rotateRedTriangle = [
-      Math.cos(rotateRedTriangleAngle), Math.sin(rotateRedTriangleAngle), 0, 0,
-      -Math.sin(rotateRedTriangleAngle), Math.cos(rotateRedTriangleAngle), 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
-    ]
-
-    var scaleRedTriangle = [
-      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
-      0.0, Math.sqrt(2)/2, 0.0, 0.0,
-      0.0, 0.0, Math.sqrt(2)/2, 0.0,
-      0.0, 0.0, 0.0, 1,
-    ]
-
-    var translateRedTriangle = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      (-Math.sqrt(2)/2)+(Math.sqrt(2)/2)*Math.cos(rotateRedTriangleAngle), 2*Math.sqrt(2) - Math.sqrt(2)/2 + (Math.sqrt(2)/2)*Math.sin(rotateRedTriangleAngle), 0, 1
-    ]
-
-    this.multMatrix(translateRedTriangle);
-    this.multMatrix(rotateRedTriangle);
-    this.multMatrix(scaleRedTriangle);
-
-    if(this.displayRedTriangle) this.redTriangle.display();
-    
-    this.popMatrix();
-
-    //Start Drawing Purple Triangle
-    this.pushMatrix();
-
-    var scalePurpleTriangle = [
-      Math.sqrt(2)/2, 0, 0, 0,
-      0, Math.sqrt(2)/2, 0, 0,
-      0, 0, Math.sqrt(2)/2, 0,
-      0, 0, 0, 1
-    ]
-
-    const rotatePurpleTriangleAngle = (90 + 45 + 15) * Math.PI / 180;
-
-    var translatePurpleToRotate = [
-      1, 0.0, 0.0, 0.0,
-      0.0, 1, 0.0, 0.0,
-      0.0, 0.0, 1, 0.0,
-      Math.sqrt(2)/2, 0.0, 0.0, 1
-    ]
-
-    var rotatePurpleTriangle = [
-      Math.cos(rotatePurpleTriangleAngle), Math.sin(rotatePurpleTriangleAngle), 0, 0,
-      -Math.sin(rotatePurpleTriangleAngle), Math.cos(rotatePurpleTriangleAngle), 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1
-    ]
-
-    var tranlatePurpleTriangle = [
-      1, 0.0, 0.0, 0.0,
-      0.0, 1, 0.0, 0.0,
-      0.0, 0.0, 1, 0.0,
-      -Math.sqrt(2)/2, 2*Math.sqrt(2) - Math.sqrt(2)/2, 0.0, 1
-    ]
-
-    this.multMatrix(tranlatePurpleTriangle);
-    this.multMatrix(rotatePurpleTriangle);
-    this.multMatrix(translatePurpleToRotate);
-    this.multMatrix(scalePurpleTriangle);
-
-    if(this.displayPurpleTriangle) this.purpleTriangle.display();
-
-    this.popMatrix();
-    */
   }
 }
