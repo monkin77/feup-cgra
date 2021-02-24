@@ -33,6 +33,7 @@ export class MyScene extends CGFscene {
     this.pinkTriangle = new MyTriangleSmall(this);
     this.orangeTriangle = new MyTriangleSmall(this);
     this.blueTriangle = new MyTriangleSmall(this);
+    this.yellowParallelogram = new MyParallelogram(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -41,6 +42,7 @@ export class MyScene extends CGFscene {
     this.displayPinkTriangle = true;
     this.displayOrangeTriangle = true;
     this.displayBlueTriangle = true;
+    this.displayYellowParallelogram = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -209,9 +211,29 @@ export class MyScene extends CGFscene {
     if(this.displayBlueTriangle) this.blueTriangle.display();
 
     this.popMatrix();
-    
-    // ---- BEGIN Primitive drawing section
 
-    // ---- END Primitive drawing section
+    //Start Drawing Yellow Parellelogram
+    this.pushMatrix();
+
+    var scaleYellowParallelogram = [
+      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
+      0.0, -Math.sqrt(2)/2, 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2)/2, 0.0,
+      0.0, 0.0, 0.0, 1,
+    ]
+    
+    var translateYellowParallelogram = [
+      1, 0.0, 0.0, 0.0,
+      0.0, 1, 0.0, 0.0,
+      0.0, 0.0, 1, 0.0,
+      -(Math.sqrt(2) + Math.sqrt(2)/2 + 2) , 2 - Math.sqrt(2)/2, 0.0, 1
+    ]
+
+    this.multMatrix(translateYellowParallelogram);
+    this.multMatrix(scaleYellowParallelogram);
+
+    if (this.displayYellowParallelogram) this.yellowParallelogram.display();
+
+    this.popMatrix();
   }
 }
