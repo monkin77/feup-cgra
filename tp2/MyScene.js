@@ -34,6 +34,7 @@ export class MyScene extends CGFscene {
     this.orangeTriangle = new MyTriangleSmall(this);
     this.blueTriangle = new MyTriangleSmall(this);
     this.redTriangle = new MyTriangleSmall(this);
+    this.yellowParallelogram = new MyParallelogram(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -43,6 +44,7 @@ export class MyScene extends CGFscene {
     this.displayOrangeTriangle = true;
     this.displayBlueTriangle = true;
     this.displayRedTriangle = true;
+    this.displayYellowParallelogram = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -212,6 +214,16 @@ export class MyScene extends CGFscene {
     if(this.displayBlueTriangle) this.blueTriangle.display();
 
     this.popMatrix();
+
+    //Start Drawing Yellow Parellelogram
+    this.pushMatrix();
+
+    var scaleYellowParallelogram = [
+      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
+      0.0, -Math.sqrt(2)/2, 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2)/2, 0.0,
+      0.0, 0.0, 0.0, 1,
+    ]
     
     // Start drawing red triangle
     
@@ -246,7 +258,31 @@ export class MyScene extends CGFscene {
 
     if(this.displayRedTriangle) this.redTriangle.display();
 
+    // Start Yellow parallelogram
+
     this.popMatrix();
 
+    this.pushMatrix();
+
+    var scaleYellowParallelogram = [
+      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
+      0.0, -Math.sqrt(2)/2, 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2)/2, 0.0,
+      0.0, 0.0, 0.0, 1,
+    ]
+
+    var translateYellowParallelogram = [
+      1, 0.0, 0.0, 0.0,
+      0.0, 1, 0.0, 0.0,
+      0.0, 0.0, 1, 0.0,
+      -(Math.sqrt(2) + Math.sqrt(2)/2 + 2) , 2 - Math.sqrt(2)/2, 0.0, 1
+    ]
+
+    this.multMatrix(translateYellowParallelogram);
+    this.multMatrix(scaleYellowParallelogram);
+
+    if (this.displayYellowParallelogram) this.yellowParallelogram.display();
+
+    this.popMatrix();
   }
 }
