@@ -23,6 +23,7 @@ export class MyInterface extends CGFinterface {
         //Slider element in GUI
         this.gui.add(this.scene, 'scaleFactor', 0.1, 5).name('Scale Factor');
 
+        /*
         //Display Green Diamond
         this.gui.add(this.scene, 'displayGreenDiamond').name('Display Green');
 
@@ -43,6 +44,9 @@ export class MyInterface extends CGFinterface {
 
         //Display Purple Triangle
         this.gui.add(this.scene, 'displayPurpleTriangle').name('Display Purple');
+        */
+
+        this.gui.add(this.scene, 'displayTangram').name('Display Tangram');
 
         return true;
     }

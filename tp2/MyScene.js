@@ -4,6 +4,7 @@ import { MyTriangle } from "./MyTriangle.js";
 import { MyParallelogram } from "./MyParallelogram.js";
 import {MyTriangleSmall} from "./MyTriangleSmall.js";
 import {MyTriangleBig} from "./MyTriangleBig.js";
+import { MyTangram } from "./MyTangram.js";
 
 /**
  * MyScene
@@ -28,7 +29,9 @@ export class MyScene extends CGFscene {
     this.gl.depthFunc(this.gl.LEQUAL);
 
     //Initialize scene objects
+    
     this.axis = new CGFaxis(this);
+    /*
     this.greenDiamond = new MyDiamond(this);
     this.pinkTriangle = new MyTriangleSmall(this);
     this.orangeTriangle = new MyTriangleSmall(this);
@@ -36,10 +39,13 @@ export class MyScene extends CGFscene {
     this.yellowParallelogram = new MyParallelogram(this);
     this.redTriangle = new MyTriangleSmall(this);
     this.purpleTriangle = new MyTriangleSmall(this);
+    */
+    this.tangram = new MyTangram(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
+    /*
     this.displayGreenDiamond = true;
     this.displayPinkTriangle = true;
     this.displayOrangeTriangle = true;
@@ -47,6 +53,8 @@ export class MyScene extends CGFscene {
     this.displayYellowParallelogram = true;
     this.displayRedTriangle = true;
     this.displayPurpleTriangle = true;
+    */
+   this.displayTangram = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -108,6 +116,11 @@ export class MyScene extends CGFscene {
       1.0,
     ];
     
+    this.multMatrix(sca);
+
+    this.tangram.display();
+
+    /*
     var scaleGreenDiamond = [   //o lado do MyDiamond é sqrt(2)
       Math.sqrt(2)/2, 0.0, 0.0, 0.0,
       0.0, Math.sqrt(2)/2, 0.0, 0.0,
@@ -319,5 +332,6 @@ export class MyScene extends CGFscene {
     if(this.displayPurpleTriangle) this.purpleTriangle.display();
 
     this.popMatrix();
+    */
   }
 }
