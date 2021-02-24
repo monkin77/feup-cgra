@@ -111,7 +111,7 @@ export class MyScene extends CGFscene {
 
     this.popMatrix();
 
-    //-------------------------------------- Drawing Cube -----------------------------
+    //-------------------------------------- Drawing Cube and transforming new Figure -----------------------------
     this.pushMatrix();
 
     var translateFigure = [
@@ -147,11 +147,6 @@ export class MyScene extends CGFscene {
     if (this.displayUnitCube) this.myUnitCube.display();
 
     this.popMatrix();
-    
-    //--------------------------------------Tranforming New Figure----------------------------
-    this.pushMatrix();
-    
 
-    this.popMatrix();
   }
 }
