@@ -35,12 +35,15 @@ export class MyInterface extends CGFinterface {
         //Display Blue Triangle
         this.gui.add(this.scene, 'displayBlueTriangle').name('Display Blue');
 
+        //Display Red Triangle
+        this.gui.add(this.scene, 'displayRedTriangle').name('Red Triangle');
+
         //Display Yellow Parallelogram
         this.gui.add(this.scene, 'displayYellowParallelogram').name('Display Yellow');
 
         //Display Purple Triangle
         this.gui.add(this.scene, 'displayPurpleTriangle').name('Display Purple');
-        
+
         return true;
     }
 }

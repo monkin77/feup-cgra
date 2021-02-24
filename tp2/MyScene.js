@@ -34,6 +34,7 @@ export class MyScene extends CGFscene {
     this.orangeTriangle = new MyTriangleSmall(this);
     this.blueTriangle = new MyTriangleSmall(this);
     this.yellowParallelogram = new MyParallelogram(this);
+    this.redTriangle = new MyTriangleSmall(this);
     this.purpleTriangle = new MyTriangleSmall(this);
 
     //Objects connected to MyInterface
@@ -44,6 +45,7 @@ export class MyScene extends CGFscene {
     this.displayOrangeTriangle = true;
     this.displayBlueTriangle = true;
     this.displayYellowParallelogram = true;
+    this.displayRedTriangle = true;
     this.displayPurpleTriangle = true;
   }
   initLights() {
@@ -74,6 +76,7 @@ export class MyScene extends CGFscene {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     // Initialize Model-View matrix as identity (no transformation
     this.updateProjectionMatrix();
+
     this.loadIdentity();
 
     // Apply transformations corresponding to the camera position relative to the origin
@@ -214,7 +217,8 @@ export class MyScene extends CGFscene {
 
     this.popMatrix();
 
-    //Start Drawing Yellow Parellelogram
+    // Start Drawing Yellow parallelogram
+
     this.pushMatrix();
 
     var scaleYellowParallelogram = [
@@ -223,7 +227,7 @@ export class MyScene extends CGFscene {
       0.0, 0.0, Math.sqrt(2)/2, 0.0,
       0.0, 0.0, 0.0, 1,
     ]
-    
+
     var translateYellowParallelogram = [
       1, 0.0, 0.0, 0.0,
       0.0, 1, 0.0, 0.0,
@@ -236,6 +240,42 @@ export class MyScene extends CGFscene {
 
     if (this.displayYellowParallelogram) this.yellowParallelogram.display();
 
+    this.popMatrix();
+
+
+    // Start drawing red triangle
+    
+    this.pushMatrix();
+
+    const rotateRedTriangleAngle = 15*Math.PI / 180;
+
+    var rotateRedTriangle = [
+      Math.cos(rotateRedTriangleAngle), Math.sin(rotateRedTriangleAngle), 0, 0,
+      -Math.sin(rotateRedTriangleAngle), Math.cos(rotateRedTriangleAngle), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]
+
+    var scaleRedTriangle = [
+      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
+      0.0, Math.sqrt(2)/2, 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2)/2, 0.0,
+      0.0, 0.0, 0.0, 1,
+    ]
+
+    var translateRedTriangle = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      (-Math.sqrt(2)/2)+(Math.sqrt(2)/2)*Math.cos(rotateRedTriangleAngle), 2*Math.sqrt(2) - Math.sqrt(2)/2 + (Math.sqrt(2)/2)*Math.sin(rotateRedTriangleAngle), 0, 1
+    ]
+
+    this.multMatrix(translateRedTriangle);
+    this.multMatrix(rotateRedTriangle);
+    this.multMatrix(scaleRedTriangle);
+
+    if(this.displayRedTriangle) this.redTriangle.display();
+    
     this.popMatrix();
 
     //Start Drawing Purple Triangle
