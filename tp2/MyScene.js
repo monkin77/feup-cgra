@@ -109,10 +109,7 @@ export class MyScene extends CGFscene {
 
     //this.tangram.display();
 
-    this.popMatrix();
-
     //-------------------------------------- Drawing Cube and transforming new Figure -----------------------------
-    this.pushMatrix();
 
     var translateFigure = [
       1, 0, 0, 0,
