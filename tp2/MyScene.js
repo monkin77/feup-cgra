@@ -33,6 +33,7 @@ export class MyScene extends CGFscene {
     this.pinkTriangle = new MyTriangleSmall(this);
     this.orangeTriangle = new MyTriangleSmall(this);
     this.blueTriangle = new MyTriangleSmall(this);
+    this.redTriangle = new MyTriangleSmall(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -41,6 +42,7 @@ export class MyScene extends CGFscene {
     this.displayPinkTriangle = true;
     this.displayOrangeTriangle = true;
     this.displayBlueTriangle = true;
+    this.displayRedTriangle = true;
   }
   initLights() {
     this.lights[0].setPosition(15, 2, 5, 1);
@@ -70,6 +72,7 @@ export class MyScene extends CGFscene {
     this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
     // Initialize Model-View matrix as identity (no transformation
     this.updateProjectionMatrix();
+
     this.loadIdentity();
 
     // Apply transformations corresponding to the camera position relative to the origin
@@ -210,8 +213,40 @@ export class MyScene extends CGFscene {
 
     this.popMatrix();
     
-    // ---- BEGIN Primitive drawing section
+    // Start drawing red triangle
+    
+    this.pushMatrix();
 
-    // ---- END Primitive drawing section
+    const rotateRedTriangleAngle = 15*Math.PI / 180;
+
+    var rotateRedTriangle = [
+      Math.cos(rotateRedTriangleAngle), Math.sin(rotateRedTriangleAngle), 0, 0,
+      -Math.sin(rotateRedTriangleAngle), Math.cos(rotateRedTriangleAngle), 0, 0,
+      0, 0, 1, 0,
+      0, 0, 0, 1
+    ]
+
+    var scaleRedTriangle = [
+      Math.sqrt(2)/2, 0.0, 0.0, 0.0,
+      0.0, Math.sqrt(2)/2, 0.0, 0.0,
+      0.0, 0.0, Math.sqrt(2)/2, 0.0,
+      0.0, 0.0, 0.0, 1,
+    ]
+
+    var translateRedTriangle = [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      (-Math.sqrt(2)/2)+(Math.sqrt(2)/2)*Math.cos(rotateRedTriangleAngle), 2*Math.sqrt(2) - Math.sqrt(2)/2 + (Math.sqrt(2)/2)*Math.sin(rotateRedTriangleAngle), 0, 1
+    ]
+
+    this.multMatrix(translateRedTriangle);
+    this.multMatrix(rotateRedTriangle);
+    this.multMatrix(scaleRedTriangle);
+
+    if(this.displayRedTriangle) this.redTriangle.display();
+
+    this.popMatrix();
+
   }
 }
