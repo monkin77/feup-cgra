@@ -6,6 +6,7 @@ import {MyTriangleSmall} from "./MyTriangleSmall.js";
 import {MyTriangleBig} from "./MyTriangleBig.js";
 import { MyTangram } from "./MyTangram.js";
 import { MyUnitCube } from "./MyUnitCube.js";
+import {MyUnitCubeQuad} from './MyUnitCubeQuad.js';
 
 /**
  * MyScene
@@ -35,6 +36,7 @@ export class MyScene extends CGFscene {
     
     this.tangram = new MyTangram(this);
     this.myUnitCube = new MyUnitCube(this);
+    this.myUnitCubeQuad = new MyUnitCubeQuad(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -43,6 +45,7 @@ export class MyScene extends CGFscene {
 
     this.displayTangram = true;
     this.displayUnitCube = true;
+    this.displayUnitCubeQuad = true;
 
   }
   initLights() {
@@ -130,7 +133,7 @@ export class MyScene extends CGFscene {
     this.multMatrix(translateFigure); //rodar figura, depois transladar para a origem o ponto superior esquerdo do cubo
     this.multMatrix(rotateFigure);
 
-    this.tangram.display(); //rodei e desenhei
+    if(this.displayTangram) this.tangram.display(); //rodei e desenhei
 
     var translateCube = [
       1, 0, 0, 0,
@@ -142,8 +145,8 @@ export class MyScene extends CGFscene {
     this.multMatrix(translateCube); // O cubo precisava de + transformaçoes entao so desenho depois das transformações todas
 
     if (this.displayUnitCube) this.myUnitCube.display();
+    if(this.displayUnitCubeQuad) this.myUnitCubeQuad.display();
 
     this.popMatrix();
-
   }
 }
