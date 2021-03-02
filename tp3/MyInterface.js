@@ -61,6 +61,8 @@ export class MyInterface extends CGFinterface {
         // a folder for ambient light
         var f3 = this.gui.addFolder('Ambient Light');
         f3.add(this.scene, 'ambientLightR', 0, 1).name("Red");
+        f3.add(this.scene, 'ambientLightG', 0, 1).name("Green");
+        f3.add(this.scene, 'ambientLightB', 0, 1).name("Blue");
 
         return true;
     }
