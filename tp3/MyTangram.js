@@ -20,6 +20,26 @@ export class MyTangram extends CGFobject{
         this.purpleTriangle = new MyTriangleSmall(scene);
     }
 
+    enableNormalViz(){
+        this.greenDiamond.enableNormalViz();
+        this.pinkTriangle.enableNormalViz();
+        this.orangeTriangle.enableNormalViz();
+        this.blueTriangle.enableNormalViz();
+        this.yellowParallelogram.enableNormalViz();
+        this.redTriangle.enableNormalViz();
+        this.purpleTriangle.enableNormalViz();
+    }
+
+    disableNormalViz(){
+        this.greenDiamond.disableNormalViz();
+        this.pinkTriangle.disableNormalViz();
+        this.orangeTriangle.disableNormalViz();
+        this.blueTriangle.disableNormalViz();
+        this.yellowParallelogram.disableNormalViz();
+        this.redTriangle.disableNormalViz();
+        this.purpleTriangle.disableNormalViz();
+    }
+
     display(){
         this.scene.pushMatrix();  //push Identity Matrix
         

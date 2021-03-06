@@ -13,10 +13,21 @@ export class MyTriangleSmall extends CGFobject{
             1, 0, 0     //2
         ]
 
+        this.vertices = this.vertices.concat(this.vertices);
+
         //Counter-clockwise reference of vertices
         this.indices = [            // Draw the parallelogram in both directions 
             0, 2, 1,
             1, 2, 0,
+        ]
+
+        this.normals = [
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, 1,
+            0, 0, -1,
+            0, 0, -1,
+            0, 0, -1,
         ]
 
         //The defined indices (and corresponding vertices)

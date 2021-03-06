@@ -18,6 +18,8 @@ export class MyDiamond extends CGFobject {
 			1, 0, 0		//3
 		];
 
+		this.vertices = this.vertices.concat(this.vertices);
+
 		//Counter-clockwise reference of vertices
 		this.indices = [
 			0, 1, 2,
@@ -25,6 +27,17 @@ export class MyDiamond extends CGFobject {
 			2, 1, 0,
 			2, 3, 1
 		];
+
+		this.normals = [
+			0, 0, 1,
+			0, 0, 1,
+			0, 0, 1, 
+			0, 0, 1,
+			0, 0, -1,
+			0, 0, -1,
+			0, 0, -1,
+			0, 0, -1,
+		]
 
 		//The defined indices (and corresponding vertices)
 		//will be read in groups of three to draw triangles
