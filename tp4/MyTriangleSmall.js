@@ -1,12 +1,20 @@
 import {CGFobject} from "../lib/CGF.js";
 
 export class MyTriangleSmall extends CGFobject{
-    constructor(scene){
+    constructor(scene, texCoords){
         super(scene);
-        this.initBuffers();
+        this.initBuffers(texCoords);
     }
 
-    initBuffers(){
+    initBuffers(texCoords){
+        if (texCoords) this.texCoords = texCoords;
+		else this.texCoords = [
+			0, 0,
+			0, 1,
+			1, 0,
+			1, 1
+		]
+        
         this.vertices = [
             -1, 0, 0,   //0
             0, 1, 0,    //1
@@ -18,7 +26,7 @@ export class MyTriangleSmall extends CGFobject{
         //Counter-clockwise reference of vertices
         this.indices = [            // Draw the parallelogram in both directions 
             0, 2, 1,
-            1, 2, 0,
+            4, 5, 3,
         ]
 
         this.normals = [

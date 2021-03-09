@@ -1,12 +1,21 @@
 import {CGFobject} from "../lib/CGF.js";
 
 export class MyParallelogram extends CGFobject{
-    constructor(scene){
+    constructor(scene, texCoords){
         super(scene);
-        this.initBuffers();
+        this.initBuffers(texCoords);
     }
 
-    initBuffers(){
+    initBuffers(texCoords){
+
+        if (texCoords) this.texCoords = texCoords;
+		else this.texCoords = [
+			0, 0,
+			0, 1,
+			1, 0,
+			1, 1
+		]
+
         this.vertices = [
             0, 0, 0,    //0
             2, 0, 0,    //1
@@ -20,8 +29,8 @@ export class MyParallelogram extends CGFobject{
         this.indices = [            // Draw the parallelogram in both directions 
             0, 2, 1,
             1, 2, 3,
-            3, 2, 1,
-            1, 2, 0,
+            7, 6, 5,
+            5, 6, 4,
         ]
 
         this.normals = [

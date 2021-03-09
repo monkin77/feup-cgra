@@ -39,13 +39,13 @@ export class MyScene extends CGFscene {
         this.quadMaterial.loadTexture('images/default.png');
         this.quadMaterial.setTextureWrap('REPEAT', 'REPEAT');
         //------
-        this.diamondMaterial = new CGFappearance(this);
-        this.diamondMaterial.setAmbient(1, 1, 1, 1);
-        this.diamondMaterial.setDiffuse(1, 1, 1, 1);
-        this.diamondMaterial.setSpecular(0, 0, 0, 1);
-        this.diamondMaterial.setShininess(10.0);
-        this.diamondMaterial.loadTexture('images/tangram.png');
-        this.diamondMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        this.tangramMaterial = new CGFappearance(this);
+        this.tangramMaterial.setAmbient(1, 1, 1, 1);
+        this.tangramMaterial.setDiffuse(1, 1, 1, 1);
+        this.tangramMaterial.setSpecular(0, 0, 0, 1);
+        this.tangramMaterial.setShininess(10.0);
+        this.tangramMaterial.loadTexture('images/tangram.png');
+        this.tangramMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
         //------ Textures
         this.texture1 = new CGFtexture(this, 'images/board.jpg');

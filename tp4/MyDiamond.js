@@ -5,12 +5,20 @@ import {CGFobject} from '../lib/CGF.js';
  * @param scene - Reference to MyScene object
  */
 export class MyDiamond extends CGFobject {
-	constructor(scene) {
+	constructor(scene, texCoords) {
 		super(scene);
-		this.initBuffers();
+		this.initBuffers(texCoords);
 	}
 	
-	initBuffers() {
+	initBuffers(texCoords) {
+		if (texCoords) this.texCoords = texCoords;
+		else this.texCoords = [
+			0, 0,
+			0, 1,
+			1, 0,
+			1, 1
+		]
+
 		this.vertices = [
 			-1, 0, 0,	//0
 			0, -1, 0,	//1
@@ -24,8 +32,8 @@ export class MyDiamond extends CGFobject {
 		this.indices = [
 			0, 1, 2,
 			1, 3, 2,
-			2, 1, 0,
-			2, 3, 1
+			6, 5, 4,
+			6, 7, 5
 		];
 
 		this.normals = [
@@ -39,12 +47,6 @@ export class MyDiamond extends CGFobject {
 			0, 0, -1,
 		]
 		
-		this.texCoords = [
-			0, 0,
-			0, 1,
-			1, 0,
-			1, 1
-		]
 
 		//The defined indices (and corresponding vertices)
 		//will be read in groups of three to draw triangles

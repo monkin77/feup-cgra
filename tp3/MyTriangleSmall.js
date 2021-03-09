@@ -18,7 +18,7 @@ export class MyTriangleSmall extends CGFobject{
         //Counter-clockwise reference of vertices
         this.indices = [            // Draw the parallelogram in both directions 
             0, 2, 1,
-            1, 2, 0,
+            4, 5, 3,
         ]
 
         this.normals = [
