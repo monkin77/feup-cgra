@@ -1,6 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
 import { MyQuad } from "./MyQuad.js";
 import { MyTangram } from "./MyTangram.js";
+import { MyUnitCubeQuad } from "./MyUnitCubeQuad.js";
 
 /**
  * MyScene
@@ -25,10 +26,6 @@ export class MyScene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
 
-        //Initialize scene objects
-        this.axis = new CGFaxis(this);
-        this.quad = new MyQuad(this);
-        this.tangram = new MyTangram(this);
 
         //------ Applied Material
         this.quadMaterial = new CGFappearance(this);
@@ -38,6 +35,7 @@ export class MyScene extends CGFscene {
         this.quadMaterial.setShininess(10.0);
         this.quadMaterial.loadTexture('images/default.png');
         this.quadMaterial.setTextureWrap('REPEAT', 'REPEAT');
+
         //------
         this.tangramMaterial = new CGFappearance(this);
         this.tangramMaterial.setAmbient(1, 1, 1, 1);
@@ -47,11 +45,21 @@ export class MyScene extends CGFscene {
         this.tangramMaterial.loadTexture('images/tangram.png');
         this.tangramMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
+
         //------ Textures
         this.texture1 = new CGFtexture(this, 'images/board.jpg');
         this.texture2 = new CGFtexture(this, 'images/floor.png');
         this.texture3 = new CGFtexture(this, 'images/window.jpg');
-        //-------
+        this.mineSide = new CGFtexture(this, 'images/mineSide.png');
+        this.mineTop = new CGFtexture(this, 'images/mineTop.png');
+        this.mineBottom = new CGFtexture(this ,'images/mineBottom.png');
+
+        this.arrTextures = [this.mineTop, this.mineSide, this.mineBottom];
+        //Initialize scene objects
+        this.axis = new CGFaxis(this);
+        this.quad = new MyQuad(this);
+        this.tangram = new MyTangram(this);
+        this.myUnitCubeQuad = new MyUnitCubeQuad(this, this.arrTextures);
 
         //-------Objects connected to MyInterface
         this.displayAxis = true;
@@ -62,6 +70,7 @@ export class MyScene extends CGFscene {
         this.displayQuad = true;
         this.applyQuadMaterial = true;
         this.displayTangram = true;
+        this.displayUnitCube = true;
 
         this.textures = [this.texture1, this.texture2, this.texture3];
         this.texCoords = [0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 0.0];
@@ -133,11 +142,11 @@ export class MyScene extends CGFscene {
         // Uncomment next line for NEAREST when magnifying, or 
         // add a checkbox in the GUI to alternate in real time
         
-        // this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+        //this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
 
         if (this.displayQuad) this.quad.display();
         if (this.displayTangram) this.tangram.display();
-
+        if (this.displayUnitCube) this.myUnitCubeQuad.display();
         // ---- END Primitive drawing section
     }
 }

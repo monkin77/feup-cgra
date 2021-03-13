@@ -1,4 +1,5 @@
-import {CGFobject} from '../lib/CGF.js';
+
+import { CGFappearance, CGFobject } from "../lib/CGF.js";
 import { MyQuad } from './MyQuad.js';
 /**
  * MyUnitCubeQuad
@@ -6,19 +7,47 @@ import { MyQuad } from './MyQuad.js';
  * @param scene - Reference to MyScene object
  */
 export class MyUnitCubeQuad extends CGFobject {
-	constructor(scene) {
+	constructor(scene, textures) {
 		super(scene);
-		this.init(scene);
+		this.init(scene, textures);
 	}
 	
-    init(scene){
+    init(scene, textures){
         //Initialize scene objects
+        this.textures = textures;
         this.myQuad = new MyQuad(scene);
+        this.initMaterials(scene);
+    }
+
+    initMaterials(scene){
+        this.mineSideMaterial = new CGFappearance(scene);
+        this.mineSideMaterial.setAmbient(1, 1, 1, 1);
+        this.mineSideMaterial.setDiffuse(1, 1, 1, 1);
+        this.mineSideMaterial.setSpecular(0, 0, 0, 1);
+        this.mineSideMaterial.setShininess(10.0);
+        this.mineSideMaterial.setTexture(this.textures[1]);
+        this.mineSideMaterial.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.mineTopMaterial = new CGFappearance(scene);
+        this.mineTopMaterial.setAmbient(1, 1, 1, 1);
+        this.mineTopMaterial.setDiffuse(1, 1, 1, 1);
+        this.mineTopMaterial.setSpecular(0, 0, 0, 1);
+        this.mineTopMaterial.setShininess(10.0);
+        this.mineTopMaterial.setTexture(this.textures[0]);
+        this.mineTopMaterial.setTextureWrap('REPEAT', 'REPEAT');
+        
+        this.mineBottomMaterial = new CGFappearance(scene);
+        this.mineBottomMaterial.setAmbient(1, 1, 1, 1);
+        this.mineBottomMaterial.setDiffuse(1, 1, 1, 1);
+        this.mineBottomMaterial.setSpecular(0, 0, 0, 1);
+        this.mineBottomMaterial.setShininess(10.0);
+        this.mineBottomMaterial.setTexture(this.textures[2]);
+        this.mineBottomMaterial.setTextureWrap('REPEAT', 'REPEAT');
     }
 
     display(){
+        //front
         this.scene.pushMatrix();  //push Identity Matrix
-
         var translateFront = [
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -28,10 +57,13 @@ export class MyUnitCubeQuad extends CGFobject {
 
         this.scene.multMatrix(translateFront);
 
+        this.mineSideMaterial.apply();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.myQuad.display();
 
         this.scene.popMatrix();
 
+        //Back
         this.scene.pushMatrix();
 
         var translateBack = [
@@ -43,10 +75,12 @@ export class MyUnitCubeQuad extends CGFobject {
 
         this.scene.multMatrix(translateBack);
 
+        //this.mineSideMaterial.apply();
         this.myQuad.display();
 
         this.scene.popMatrix();
 
+        //Right
         this.scene.pushMatrix();
 
         const angleOfRotation = 90 * Math.PI / 180;
@@ -68,10 +102,12 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.multMatrix(translateRight);
         this.scene.multMatrix(RotateAroundY);
 
+        //this.mineSideMaterial.apply();
         this.myQuad.display();
 
         this.scene.popMatrix();
 
+        //Left
         this.scene.pushMatrix();
 
         var translateLeft = [
@@ -84,10 +120,12 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.multMatrix(translateLeft);
         this.scene.multMatrix(RotateAroundY);
 
+        //this.mineSideMaterial.apply();
         this.myQuad.display();
         
         this.scene.popMatrix();   //reset to old matrix
 
+        //Up
         this.scene.pushMatrix();
 
         var RotateAroundX = [
@@ -107,10 +145,13 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.multMatrix(translateUp);
         this.scene.multMatrix(RotateAroundX);
 
+        this.mineTopMaterial.apply();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.myQuad.display();
 
         this.scene.popMatrix();
 
+        //down
         this.scene.pushMatrix();
 
         var translateDown = [
@@ -123,6 +164,8 @@ export class MyUnitCubeQuad extends CGFobject {
         this.scene.multMatrix(translateDown);
         this.scene.multMatrix(RotateAroundX);
 
+        this.mineBottomMaterial.apply();
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.myQuad.display();
 
         this.scene.popMatrix();

@@ -9,6 +9,7 @@ export class MyQuad extends CGFobject {
 	constructor(scene, coords) {
 		super(scene);
 		this.initBuffers();
+		
 		if (coords != undefined)
 			this.updateTexCoords(coords);
 	}
@@ -21,10 +22,17 @@ export class MyQuad extends CGFobject {
 			0.5, 0.5, 0		//3
 		];
 
+		this.vertices = this.vertices.concat(this.vertices);
 		//Counter-clockwise reference of vertices
 		this.indices = [
 			0, 1, 2,
-			1, 3, 2
+			1, 3, 2,
+			
+			/*2, 3, 1,
+			2, 1, 0,*/
+			
+			6, 7, 5,
+			6, 5, 4,
 		];
 
 		//Facing Z positive
@@ -32,9 +40,14 @@ export class MyQuad extends CGFobject {
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1,
-			0, 0, 1
+			0, 0, 1,
+			0, 0, -1,
+			0, 0, -1, 
+			0, 0, -1,
+			0, 0, -1
 		];
 		
+
 		/*
 		Texture coords (s,t)
 		+----------> s
@@ -49,8 +62,14 @@ export class MyQuad extends CGFobject {
 			0, 1,
 			1, 1,
 			0, 0,
-			1, 0
+			1, 0,
+
+			0, 1,
+			1, 1,
+			0, 0,
+			1, 0,
 		]
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
