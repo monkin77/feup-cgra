@@ -218,7 +218,7 @@ export class ShaderScene extends CGFscene {
 			this.testShaders[9].setUniformsValues({ timeFactor: t / 100 % 100 });
 		}
 		if(this.selectedExampleShader == 11){
-			this.testShaders[11].setUniformsValues({offset: t%1000})	// offset is the timeFactor % 1
+			this.testShaders[11].setUniformsValues({offset: t%10000})	// offset is the timeFactor % 1
 		}
 	}
 
