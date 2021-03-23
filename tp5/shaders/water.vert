@@ -8,9 +8,13 @@ uniform mat4 uNMatrix;
 
 varying vec2 vTextureCoord;
 
-void main() {
+uniform sampler2D uSampler2;
 
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+void main() {
+    vec4 waterMapColor = texture2D(uSampler2, aTextureCoord); 
+    vec3 heightMultiplier = aVertexNormal * waterMapColor.b * 0.075;
+    
+	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition + heightMultiplier, 1.0);
 
 	vTextureCoord = aTextureCoord;
 }
