@@ -111,7 +111,7 @@ export class ShaderScene extends CGFscene {
 		this.testShaders[6].setUniformsValues({ timeFactor: 0 });
 
 		this.testShaders[9].setUniformsValues({timeFactor: 0, normScale: this.scaleFactor});
-		this.testShaders[11].setUniformsValues({uSampler2: 1});		// The uSampler is already sent by default
+		this.testShaders[11].setUniformsValues({uSampler2: 1, offset: 0});		// The uSampler is already sent by default
 
 		// Shaders interface variables
 
@@ -216,6 +216,9 @@ export class ShaderScene extends CGFscene {
 
 		if (this.selectedExampleShader == 9){
 			this.testShaders[9].setUniformsValues({ timeFactor: t / 100 % 100 });
+		}
+		if(this.selectedExampleShader == 11){
+			this.testShaders[11].setUniformsValues({offset: t%1000})	// offset is the timeFactor % 1
 		}
 	}
 

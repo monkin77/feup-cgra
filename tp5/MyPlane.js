@@ -67,7 +67,6 @@ export class MyPlane extends CGFobject {
 	{ 
 		this.primitiveType=this.scene.gl.LINES;
 	};
-
 }
 
 
