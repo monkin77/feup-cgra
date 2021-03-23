@@ -91,6 +91,7 @@ export class ShaderScene extends CGFscene {
 			new CGFshader(this.gl, "shaders/texture1.vert", "shaders/convolution.frag"),
 			new CGFshader(this.gl, "shaders/ex1Shader.vert", "shaders/ex1Shader.frag"),
 			new CGFshader(this.gl, "shaders/ex1Shader.vert", "shaders/ex3Shader.frag"),
+			new CGFshader(this.gl, "shaders/water.vert", "shaders/water.frag"),
 		];
 
 		// additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
@@ -116,6 +117,7 @@ export class ShaderScene extends CGFscene {
 			'Convolution': 8,
 			'ex1Shader': 9,
 			'ex3Shader': 10,
+			'waterShader': 11,
 		};
 
 		// shader code panels references
