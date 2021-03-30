@@ -14,6 +14,7 @@ void main() {
 
 
 	color = color - vec4(0.2*filter1.b, 0.2*filter1.b, 0.2*filter1.b, 0);
+	//color = color - vec4(0.2*(1.0-filter1.b), 0.2*(1.0-filter1.b), 0.2*(1.0-filter1.b), 0);
 	
         
 	gl_FragColor = color;
