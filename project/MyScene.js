@@ -1,4 +1,5 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance } from "../lib/CGF.js";
+import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
 
 /**
@@ -29,6 +30,7 @@ export class MyScene extends CGFscene {
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
+        this.myMovingObject = new MyMovingObject(this);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -65,6 +67,8 @@ export class MyScene extends CGFscene {
         this.setShininess(10.0);
     }
 
+    checkKeys()
+
     // called periodically (as per setUpdatePeriod() in init())
     update(t){
         //To be done...
@@ -91,7 +95,8 @@ export class MyScene extends CGFscene {
         // ---- BEGIN Primitive drawing section
 
         //This sphere does not have defined texture coordinates
-        this.incompleteSphere.display();
+        // this.incompleteSphere.display();
+        this.myMovingObject.display();
 
         // ---- END Primitive drawing section
     }
