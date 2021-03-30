@@ -9,13 +9,17 @@ export class MyMovingObject extends CGFobject {
     constructor(scene){
         super(scene);
         this.initBuffers();
+
+        this.orientation = 0;
+        this.speed = 0;
+        this.position = [0, 0, 0];
     }
 
     initBuffers(){
         this.vertices = [
-            2, 1, 0,    // 0
-            0, 1, 0,    // 1
-            0, 0, 1     // 2
+            0.5, 0, -0.5,       // 0
+            -0.5, 0, -0.5,      // 1
+            0, 0, 0.5           // 2
         ]
 
         this.vertices = this.vertices.concat(this.vertices);
@@ -27,12 +31,12 @@ export class MyMovingObject extends CGFobject {
 		];
 
         this.normals = [
-            0, 1, 1,
-            0, 1, 1,
-            0, 1, 1,
-            0, -1, -1,
-            0, -1, -1,
-            0, -1, -1,
+            0, 1, 0,
+            0, 1, 0,
+            0, 1, 0,
+            0, -1, 0,
+            0, -1, 0,
+            0, -1, 0,
         ]
 
         //The defined indices (and corresponding vertices)
