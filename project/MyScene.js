@@ -67,6 +67,25 @@ export class MyScene extends CGFscene {
         this.setShininess(10.0);
     }
 
+    turn(val){
+        console.log("Orientation: ", this.myMovingObject.orientation);
+        this.myMovingObject.orientation += val;
+    }
+
+    accelerate(val){
+        console.log("Speed: ", this.myMovingObject.speed);
+        this.myMovingObject.speed += val;
+
+        if(this.myMovingObject.speed < 0){
+            this.myMovingObject.speed = 0;
+        }
+    }
+
+    reset(){
+        this.myMovingObject.speed = 0;
+        this.myMovingObject.orientation = 0;
+    }
+
     checkKeys(){
         var text = "Keys pressed: ";
         var keysPressed = false;
@@ -75,11 +94,26 @@ export class MyScene extends CGFscene {
         if(this.gui.isKeyPressed("KeyW")){
             text += " W ";
             keysPressed = true;
+            this.accelerate(0.1);
         }
 
         if(this.gui.isKeyPressed("KeyS")) {
             text += " S ";
             keysPressed = true;
+            if(this.myMovingObject.speed > 0)
+                this.accelerate(-0.1);
+        }
+
+        if(this.gui.isKeyPressed("KeyA")) {
+            text += " A ";
+            keysPressed = true;
+            this.turn(-0.1);
+        }
+
+        if(this.gui.isKeyPressed("KeyD")) {
+            text += " D ";
+            keysPressed = true;
+            this.turn(0.1);
         }
 
         if(keysPressed)
@@ -89,6 +123,7 @@ export class MyScene extends CGFscene {
     // called periodically (as per setUpdatePeriod() in init())
     update(t){
         this.checkKeys();
+        this.myMovingObject.update();
     }
 
     display() {
@@ -102,7 +137,6 @@ export class MyScene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
         
-        
         this.defaultAppearance.apply();
         // Draw axis
         if (this.displayAxis)
@@ -113,6 +147,24 @@ export class MyScene extends CGFscene {
 
         //This sphere does not have defined texture coordinates
         // this.incompleteSphere.display();
+
+        var rotateMovingObject = [
+            Math.cos(this.myMovingObject.orientation), 0, -Math.sin(this.myMovingObject.orientation), 0,
+            0, 1, 0, 0,
+            Math.sin(this.myMovingObject.orientation), 0, Math.cos(this.myMovingObject.orientation), 0,
+            0, 0, 0, 1
+        ];
+
+        var translateMovingObject = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            this.myMovingObject.position[0], this.myMovingObject.position[1], this.myMovingObject.position[2], 1
+        ]
+
+        this.multMatrix(translateMovingObject);
+        this.multMatrix(rotateMovingObject);
+
         this.myMovingObject.display();
 
         // ---- END Primitive drawing section

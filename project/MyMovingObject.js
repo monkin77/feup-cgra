@@ -10,9 +10,9 @@ export class MyMovingObject extends CGFobject {
         super(scene);
         this.initBuffers();
 
-        this.orientation = 0;
-        this.speed = 0;
-        this.position = [0, 0, 0];
+        this.speed = 0.0;
+        this.position = [0.0, 0.0, 0.0];
+        this.orientation = 0.0;
     }
 
     initBuffers(){
@@ -21,7 +21,7 @@ export class MyMovingObject extends CGFobject {
             -0.5, 0, -0.5,      // 1
             0, 0, 0.5           // 2
         ]
-
+        
         this.vertices = this.vertices.concat(this.vertices);
 
         //Counter-clockwise reference of vertices
@@ -44,5 +44,16 @@ export class MyMovingObject extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLES;
 
         this.initGLBuffers();
+    }
+
+    update(){
+        let directionVector = [0.0, 0.0, 0.0];
+
+        directionVector[0] = Math.sin(this.orientation) * this.speed;
+        directionVector[2] = Math.cos(this.orientation) * this.speed;
+
+        this.position[0] = this.position[0] + directionVector[0];
+        this.position[1] = this.position[1] + directionVector[1];
+        this.position[2] = this.position[2] + directionVector[2];
     }
 }
