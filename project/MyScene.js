@@ -163,7 +163,18 @@ export class MyScene extends CGFscene {
             0.0, 0.0, 0.0, 1,
         ]
 
+        var translateToCamera = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            this.camera.position[0], this.camera.position[1], this.camera.position[2], 1
+        ]
+
+        // this.multMatrix(translateToCamera);  
+        // test to check error. It doesnt move when we ampliamos
+        //  VAMOS AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
         this.multMatrix(scaleCubeMap);
+
         this.myCubeMap.display();
         this.popMatrix();
 
