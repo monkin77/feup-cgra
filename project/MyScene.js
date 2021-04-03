@@ -29,12 +29,12 @@ export class MyScene extends CGFscene {
         this.enableTextures(true);
 
         // Textures
-        this.texture1 = new CGFtexture(this, 'images/test_cubemap/nx.png');
-        this.texture2 = new CGFtexture(this, 'images/test_cubemap/ny.png');
-        this.texture3 = new CGFtexture(this, 'images/test_cubemap/nz.png');
-        this.texture4 = new CGFtexture(this, 'images/test_cubemap/px.png');
-        this.texture5 = new CGFtexture(this, 'images/test_cubemap/py.png');
-        this.texture6 = new CGFtexture(this ,'images/test_cubemap/pz.png');
+        this.texture1 = new CGFtexture(this, 'images/demo_cubemap/left.png');       // nx
+        this.texture2 = new CGFtexture(this, 'images/demo_cubemap/bottom.png');     // ny
+        this.texture3 = new CGFtexture(this, 'images/demo_cubemap/back.png');       // nz
+        this.texture4 = new CGFtexture(this, 'images/demo_cubemap/right.png');      // px
+        this.texture5 = new CGFtexture(this, 'images/demo_cubemap/top.png');        // py
+        this.texture6 = new CGFtexture(this ,'images/demo_cubemap/front.png');      // pz
 
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
 
@@ -48,7 +48,7 @@ export class MyScene extends CGFscene {
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.defaultAppearance.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.defaultAppearance.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.defaultAppearance.setEmission(0,0,0,1);
+        this.defaultAppearance.setEmission(0, 0, 0,1);
 		this.defaultAppearance.setShininess(120);
 
 		this.sphereAppearance = new CGFappearance(this);
@@ -152,7 +152,20 @@ export class MyScene extends CGFscene {
         this.applyViewMatrix();
         
         this.defaultAppearance.apply();
+
+        // SCALING CUBE MAP
+        this.pushMatrix();
+                
+        var scaleCubeMap = [   //o lado do MyDiamond é sqrt(2)
+            50, 0.0, 0.0, 0.0,
+            0.0, 50, 0.0, 0.0,
+            0.0, 0.0, 50, 0.0,
+            0.0, 0.0, 0.0, 1,
+        ]
+
+        this.multMatrix(scaleCubeMap);
         this.myCubeMap.display();
+        this.popMatrix();
 
         // Draw axis
         if (this.displayAxis)

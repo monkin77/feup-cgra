@@ -25,7 +25,7 @@ export class MyCubeMap extends CGFobject {
         this.cubeMapMaterial.setDiffuse(0, 0, 0, 1);
         this.cubeMapMaterial.setSpecular(0, 0, 0, 1);
         this.cubeMapMaterial.setShininess(10.0);
-        this.cubeMapMaterial.setEmission(0.5, 0.3, 0.8, 1);
+        this.cubeMapMaterial.setEmission(1, 1, 1, 1);
         // this.cubeMapMaterial.setTexture(this.textures[0]);
         this.cubeMapMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
