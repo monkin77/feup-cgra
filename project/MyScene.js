@@ -1,6 +1,7 @@
-import { CGFscene, CGFcamera, CGFaxis, CGFappearance } from "../lib/CGF.js";
+import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
 import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
+import { MyCubeMap } from "./MyCubeMap.js";
 
 /**
 * MyScene
@@ -27,10 +28,21 @@ export class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
+        // Textures
+        this.texture1 = new CGFtexture(this, 'images/test_cubemap/nx.png');
+        this.texture2 = new CGFtexture(this, 'images/test_cubemap/ny.png');
+        this.texture3 = new CGFtexture(this, 'images/test_cubemap/nz.png');
+        this.texture4 = new CGFtexture(this, 'images/test_cubemap/px.png');
+        this.texture5 = new CGFtexture(this, 'images/test_cubemap/py.png');
+        this.texture6 = new CGFtexture(this ,'images/test_cubemap/pz.png');
+
+        this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
+
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.myMovingObject = new MyMovingObject(this);
+        this.myCubeMap = new MyCubeMap(this, this.arrTextures);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -49,12 +61,14 @@ export class MyScene extends CGFscene {
         //Objects connected to MyInterface
         this.displayAxis = true;
     }
+
     initLights() {
         this.lights[0].setPosition(15, 2, 5, 1);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
     }
+    
     initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
@@ -68,12 +82,12 @@ export class MyScene extends CGFscene {
     }
 
     turn(val){
-        console.log("Orientation: ", this.myMovingObject.orientation);
+        // console.log("Orientation: ", this.myMovingObject.orientation);
         this.myMovingObject.orientation += val;
     }
 
     accelerate(val){
-        console.log("Speed: ", this.myMovingObject.speed);
+        // console.log("Speed: ", this.myMovingObject.speed);
         this.myMovingObject.speed += val;
 
         if(this.myMovingObject.speed < 0){
@@ -138,6 +152,8 @@ export class MyScene extends CGFscene {
         this.applyViewMatrix();
         
         this.defaultAppearance.apply();
+        this.myCubeMap.display();
+
         // Draw axis
         if (this.displayAxis)
             this.axis.display();
@@ -147,6 +163,8 @@ export class MyScene extends CGFscene {
 
         //This sphere does not have defined texture coordinates
         // this.incompleteSphere.display();
+
+        this.pushMatrix();
 
         var rotateMovingObject = [
             Math.cos(this.myMovingObject.orientation), 0, -Math.sin(this.myMovingObject.orientation), 0,
@@ -166,7 +184,7 @@ export class MyScene extends CGFscene {
         this.multMatrix(rotateMovingObject);
 
         this.myMovingObject.display();
-
+        this.popMatrix();
         // ---- END Primitive drawing section
     }
 }
