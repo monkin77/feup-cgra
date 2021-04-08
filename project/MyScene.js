@@ -28,7 +28,7 @@ export class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
-        // Textures
+        // Texture 1
         this.texture1 = new CGFtexture(this, 'images/demo_cubemap/left.png');       // nx
         this.texture2 = new CGFtexture(this, 'images/demo_cubemap/bottom.png');     // ny
         this.texture3 = new CGFtexture(this, 'images/demo_cubemap/back.png');       // nz
@@ -36,13 +36,32 @@ export class MyScene extends CGFscene {
         this.texture5 = new CGFtexture(this, 'images/demo_cubemap/top.png');        // py
         this.texture6 = new CGFtexture(this ,'images/demo_cubemap/front.png');      // pz
 
+        // Texture 2
+        this.texture2_1 = new CGFtexture(this, 'images/my_img_1/left.png');       // nx
+        this.texture2_2 = new CGFtexture(this, 'images/my_img_1/bottom.png');     // ny
+        this.texture2_3 = new CGFtexture(this, 'images/my_img_1/back.png');       // nz
+        this.texture2_4 = new CGFtexture(this, 'images/my_img_1/right.png');      // px
+        this.texture2_5 = new CGFtexture(this, 'images/my_img_1/top.png');        // py
+        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/front.png');      // pz
+
+
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
+        this.arrTextures2 = [this.texture2_1, this.texture2_2, this.texture2_3, this.texture2_4, this.texture2_5, this.texture2_6];
+
+        this.myCubeMapTextures = [this.arrTextures, this.arrTextures2];
+
+        this.myCubeMapTextureSelector = 0;  // variable that chooses the current texture
+
+        this.myCubeMapTexturesList = {  // Object interface variables
+            'Default': 0,
+            'Custom 1': 1
+        } 
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.myMovingObject = new MyMovingObject(this);
-        this.myCubeMap = new MyCubeMap(this, this.arrTextures);
+        this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -79,6 +98,11 @@ export class MyScene extends CGFscene {
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setEmission(0,0,0,1);
         this.setShininess(10.0);
+    }
+
+    onMyCubeMapTextureChange = () => {      // needs to be an arrow function so that the this object is the MyScene object
+        if(this.myCubeMap) this.myCubeMap.updateTextures(this.myCubeMapTextures[this.myCubeMapTextureSelector]);
+        else console.error("this.myCubeMap is null");
     }
 
     turn(val){
@@ -157,9 +181,9 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
                 
         var scaleCubeMap = [   //o lado do MyDiamond é sqrt(2)
-            50, 0.0, 0.0, 0.0,
-            0.0, 50, 0.0, 0.0,
-            0.0, 0.0, 50, 0.0,
+            500, 0.0, 0.0, 0.0,
+            0.0, 500, 0.0, 0.0,
+            0.0, 0.0, 500, 0.0,
             0.0, 0.0, 0.0, 1,
         ]
 
@@ -169,8 +193,10 @@ export class MyScene extends CGFscene {
             0, 0, 1, 0,
             this.camera.position[0], this.camera.position[1], this.camera.position[2], 1
         ]
+        
+        // console.log("Cam position:", this.camera.position);
 
-        // this.multMatrix(translateToCamera);  
+        this.multMatrix(translateToCamera);  
         // test to check error. It doesnt move when we ampliamos
         //  VAMOS AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
         this.multMatrix(scaleCubeMap);

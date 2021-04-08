@@ -20,6 +20,7 @@ export class MyInterface extends CGFinterface {
 
         //Checkbox element in GUI
         this.gui.add(this.scene, 'displayAxis').name('Display Axis');
+        this.gui.add(this.scene, 'myCubeMapTextureSelector', this.scene.myCubeMapTexturesList).name('Change Cube Texture').onChange(this.scene.onMyCubeMapTextureChange);
 
         this.initKeys();
 
