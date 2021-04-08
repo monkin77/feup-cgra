@@ -1,6 +1,7 @@
-import { CGFscene, CGFcamera, CGFaxis, CGFappearance } from "../lib/CGF.js";
+import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
 import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
+import { MyCubeMap } from "./MyCubeMap.js";
 
 /**
 * MyScene
@@ -27,16 +28,46 @@ export class MyScene extends CGFscene {
         
         this.enableTextures(true);
 
+        // Texture 1
+        this.texture1 = new CGFtexture(this, 'images/demo_cubemap/left.png');       // nx
+        this.texture2 = new CGFtexture(this, 'images/demo_cubemap/bottom.png');     // ny
+        this.texture3 = new CGFtexture(this, 'images/demo_cubemap/back.png');       // nz
+        this.texture4 = new CGFtexture(this, 'images/demo_cubemap/right.png');      // px
+        this.texture5 = new CGFtexture(this, 'images/demo_cubemap/top.png');        // py
+        this.texture6 = new CGFtexture(this ,'images/demo_cubemap/front.png');      // pz
+
+        // Texture 2
+        this.texture2_1 = new CGFtexture(this, 'images/my_img_1/nx.png');       // nx
+        this.texture2_2 = new CGFtexture(this, 'images/my_img_1/ny.png');     // ny
+        this.texture2_3 = new CGFtexture(this, 'images/my_img_1/nz.png');       // nz
+        this.texture2_4 = new CGFtexture(this, 'images/my_img_1/px.png');      // px
+        this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
+        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz
+
+
+        this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
+        this.arrTextures2 = [this.texture2_1, this.texture2_2, this.texture2_3, this.texture2_4, this.texture2_5, this.texture2_6];
+
+        this.myCubeMapTextures = [this.arrTextures, this.arrTextures2];
+
+        this.myCubeMapTextureSelector = 0;  // variable that chooses the current texture
+
+        this.myCubeMapTexturesList = {  // Object interface variables
+            'Default': 0,
+            'Custom 1': 1
+        } 
+
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.myMovingObject = new MyMovingObject(this);
+        this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
         this.defaultAppearance.setDiffuse(0.2, 0.4, 0.8, 1.0);
         this.defaultAppearance.setSpecular(0.2, 0.4, 0.8, 1.0);
-        this.defaultAppearance.setEmission(0,0,0,1);
+        this.defaultAppearance.setEmission(0, 0, 0,1);
 		this.defaultAppearance.setShininess(120);
 
 		this.sphereAppearance = new CGFappearance(this);
@@ -49,12 +80,14 @@ export class MyScene extends CGFscene {
         //Objects connected to MyInterface
         this.displayAxis = true;
     }
+
     initLights() {
         this.lights[0].setPosition(15, 2, 5, 1);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
     }
+    
     initCameras() {
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
     }
@@ -67,13 +100,18 @@ export class MyScene extends CGFscene {
         this.setShininess(10.0);
     }
 
+    onMyCubeMapTextureChange = () => {      // needs to be an arrow function so that the this object is the MyScene object
+        if(this.myCubeMap) this.myCubeMap.updateTextures(this.myCubeMapTextures[this.myCubeMapTextureSelector]);
+        else console.error("this.myCubeMap is null");
+    }
+
     turn(val){
-        console.log("Orientation: ", this.myMovingObject.orientation);
+        // console.log("Orientation: ", this.myMovingObject.orientation);
         this.myMovingObject.orientation += val;
     }
 
     accelerate(val){
-        console.log("Speed: ", this.myMovingObject.speed);
+        // console.log("Speed: ", this.myMovingObject.speed);
         this.myMovingObject.speed += val;
 
         if(this.myMovingObject.speed < 0){
@@ -138,6 +176,34 @@ export class MyScene extends CGFscene {
         this.applyViewMatrix();
         
         this.defaultAppearance.apply();
+
+        // SCALING CUBE MAP
+        this.pushMatrix();
+                
+        var scaleCubeMap = [   //o lado do MyDiamond é sqrt(2)
+            50, 0.0, 0.0, 0.0,
+            0.0, 50, 0.0, 0.0,
+            0.0, 0.0, 50, 0.0,
+            0.0, 0.0, 0.0, 1,
+        ]
+
+        var translateToCamera = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            this.camera.position[0], this.camera.position[1], this.camera.position[2], 1
+        ]
+        
+        // console.log("Cam position:", this.camera.position);
+
+        // this.multMatrix(translateToCamera);  
+        // test to check error. It doesnt move when we ampliamos
+        //  VAMOS AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+        this.multMatrix(scaleCubeMap);
+
+        this.myCubeMap.display();
+        this.popMatrix();
+
         // Draw axis
         if (this.displayAxis)
             this.axis.display();
@@ -147,6 +213,8 @@ export class MyScene extends CGFscene {
 
         //This sphere does not have defined texture coordinates
         // this.incompleteSphere.display();
+
+        this.pushMatrix();
 
         var rotateMovingObject = [
             Math.cos(this.myMovingObject.orientation), 0, -Math.sin(this.myMovingObject.orientation), 0,
@@ -166,7 +234,7 @@ export class MyScene extends CGFscene {
         this.multMatrix(rotateMovingObject);
 
         this.myMovingObject.display();
-
+        this.popMatrix();
         // ---- END Primitive drawing section
     }
 }
