@@ -181,9 +181,9 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
                 
         var scaleCubeMap = [   //o lado do MyDiamond é sqrt(2)
-            50, 0.0, 0.0, 0.0,
-            0.0, 50, 0.0, 0.0,
-            0.0, 0.0, 50, 0.0,
+            500, 0.0, 0.0, 0.0,
+            0.0, 500, 0.0, 0.0,
+            0.0, 0.0, 500, 0.0,
             0.0, 0.0, 0.0, 1,
         ]
 
@@ -196,9 +196,7 @@ export class MyScene extends CGFscene {
         
         // console.log("Cam position:", this.camera.position);
 
-        // this.multMatrix(translateToCamera);  
-        // test to check error. It doesnt move when we ampliamos
-        //  VAMOS AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+        this.multMatrix(translateToCamera);  
         this.multMatrix(scaleCubeMap);
 
         this.myCubeMap.display();
