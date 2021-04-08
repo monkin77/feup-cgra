@@ -2,6 +2,7 @@ import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/
 import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
 import { MyCubeMap } from "./MyCubeMap.js";
+import { MyCylinder } from "./MyCylinder.js";
 
 /**
 * MyScene
@@ -62,6 +63,7 @@ export class MyScene extends CGFscene {
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.myMovingObject = new MyMovingObject(this);
         this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
+        this.myCylinder = new MyCylinder(this, 16);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -75,6 +77,13 @@ export class MyScene extends CGFscene {
 		this.sphereAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
 		this.sphereAppearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.sphereAppearance.setShininess(120);
+
+        this.cylinderAppearance = new CGFappearance(this);
+		this.cylinderAppearance.setAmbient(0.3, 0.3, 0.3, 1);
+		this.cylinderAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.cylinderAppearance.setSpecular(0.0, 0.0, 0.0, 1);
+		this.cylinderAppearance.setShininess(10);
+        this.cylinderAppearance.setTexture(this.texture1);
 
 
         //Objects connected to MyInterface
@@ -233,6 +242,9 @@ export class MyScene extends CGFscene {
 
         this.myMovingObject.display();
         this.popMatrix();
-        // ---- END Primitive drawing section
+
+        this.cylinderAppearance.apply();
+
+        this.myCylinder.display();
     }
 }
