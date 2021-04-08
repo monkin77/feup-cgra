@@ -50,7 +50,8 @@ export class MyCubeMap extends CGFobject {
 
         this.cubeMapMaterial.apply();
 
-        // this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
+        this.scene.gl.texParameteri
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         this.myQuad.display();
 
         this.scene.popMatrix();
@@ -163,7 +164,7 @@ export class MyCubeMap extends CGFobject {
         this.scene.multMatrix(rotateAroundX180);
         this.scene.multMatrix(RotateAroundX);
 
-        // this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         
         this.cubeMapMaterial.setTexture(this.textures[4]);
         this.cubeMapMaterial.apply();
@@ -184,7 +185,7 @@ export class MyCubeMap extends CGFobject {
         this.scene.multMatrix(translateDown);
         this.scene.multMatrix(RotateAroundX);
 
-        // this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         
         this.cubeMapMaterial.setTexture(this.textures[1]);
         this.cubeMapMaterial.apply();

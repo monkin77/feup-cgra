@@ -37,12 +37,12 @@ export class MyScene extends CGFscene {
         this.texture6 = new CGFtexture(this ,'images/demo_cubemap/front.png');      // pz
 
         // Texture 2
-        this.texture2_1 = new CGFtexture(this, 'images/my_img_1/left.png');       // nx
-        this.texture2_2 = new CGFtexture(this, 'images/my_img_1/bottom.png');     // ny
-        this.texture2_3 = new CGFtexture(this, 'images/my_img_1/back.png');       // nz
-        this.texture2_4 = new CGFtexture(this, 'images/my_img_1/right.png');      // px
-        this.texture2_5 = new CGFtexture(this, 'images/my_img_1/top.png');        // py
-        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/front.png');      // pz
+        this.texture2_1 = new CGFtexture(this, 'images/my_img_1/nx.png');       // nx
+        this.texture2_2 = new CGFtexture(this, 'images/my_img_1/ny.png');     // ny
+        this.texture2_3 = new CGFtexture(this, 'images/my_img_1/nz.png');       // nz
+        this.texture2_4 = new CGFtexture(this, 'images/my_img_1/px.png');      // px
+        this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
+        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz
 
 
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
@@ -181,9 +181,9 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
                 
         var scaleCubeMap = [   //o lado do MyDiamond é sqrt(2)
-            500, 0.0, 0.0, 0.0,
-            0.0, 500, 0.0, 0.0,
-            0.0, 0.0, 500, 0.0,
+            50, 0.0, 0.0, 0.0,
+            0.0, 50, 0.0, 0.0,
+            0.0, 0.0, 50, 0.0,
             0.0, 0.0, 0.0, 1,
         ]
 
@@ -196,7 +196,7 @@ export class MyScene extends CGFscene {
         
         // console.log("Cam position:", this.camera.position);
 
-        this.multMatrix(translateToCamera);  
+        // this.multMatrix(translateToCamera);  
         // test to check error. It doesnt move when we ampliamos
         //  VAMOS AQUIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
         this.multMatrix(scaleCubeMap);

@@ -50,10 +50,10 @@ export class MyQuad extends CGFobject {
         */
 
 		this.texCoords = [		// set a 0.02 offset on all coords so that we do not see the limits of the image
-			0.02, 0.998,
-			0.998, 0.998,
-			0.02, 0.02,
-			0.998, 0.02,
+			0.0, 1.0,
+			1.0, 1.0,
+			0.0, 0.0,
+			1.0, 0.0,
 		]
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
