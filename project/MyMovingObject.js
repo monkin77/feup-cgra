@@ -46,7 +46,7 @@ export class MyMovingObject extends CGFobject {
         this.initGLBuffers();
     }
 
-    update(){
+    update(){        
         let directionVector = [0.0, 0.0, 0.0];
 
         directionVector[0] = Math.sin(this.orientation) * this.speed;
