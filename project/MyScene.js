@@ -127,8 +127,6 @@ export class MyScene extends CGFscene {
     accelerate(val){
         // console.log("Speed: ", this.myMovingObject.speed);
         this.myMovingObject.speed += val;
-
-        this.myMovingObject.speed *= this.speedFactor;
         
         if(this.myMovingObject.speed < 0){
             this.myMovingObject.speed = 0;
@@ -172,6 +170,11 @@ export class MyScene extends CGFscene {
 
         if(keysPressed)
             console.log(text);
+    }
+
+    // Update speed factor attribute of Objects
+    onSpeedFactorChange = () => {
+        this.myMovingObject.speedFactor = this.speedFactor;
     }
 
     // called periodically (as per setUpdatePeriod() in init())
