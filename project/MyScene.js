@@ -89,6 +89,8 @@ export class MyScene extends CGFscene {
         this.cylinderAppearance.setTexture(this.sphereTexture);
 
 
+        this.scaleFactor = 1;
+        this.speedFactor = 1;
         //Objects connected to MyInterface
         this.displayAxis = true;
     }
@@ -125,7 +127,7 @@ export class MyScene extends CGFscene {
     accelerate(val){
         // console.log("Speed: ", this.myMovingObject.speed);
         this.myMovingObject.speed += val;
-
+        
         if(this.myMovingObject.speed < 0){
             this.myMovingObject.speed = 0;
         }
@@ -170,6 +172,11 @@ export class MyScene extends CGFscene {
             console.log(text);
     }
 
+    // Update speed factor attribute of Objects
+    onSpeedFactorChange = () => {
+        this.myMovingObject.speedFactor = this.speedFactor;
+    }
+
     // called periodically (as per setUpdatePeriod() in init())
     update(t){
         this.checkKeys();
@@ -189,6 +196,7 @@ export class MyScene extends CGFscene {
         
         this.defaultAppearance.apply();
 
+        
         // SCALING CUBE MAP
         this.pushMatrix();
                 
@@ -233,10 +241,18 @@ export class MyScene extends CGFscene {
             0, 1, 0, 0,
             0, 0, 1, 0,
             this.myMovingObject.position[0], this.myMovingObject.position[1], this.myMovingObject.position[2], 1
-        ]
+        ];
+
+        var scaleMovingObject = [
+            this.scaleFactor, 0, 0, 0,
+            0, this.scaleFactor, 0, 0,
+            0, 0, this.scaleFactor, 0,
+            0, 0, 0, 1,
+        ];
 
         this.multMatrix(translateMovingObject);
         this.multMatrix(rotateMovingObject);
+        this.multMatrix(scaleMovingObject);
 
         this.myMovingObject.display();
         this.popMatrix();

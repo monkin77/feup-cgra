@@ -11,6 +11,7 @@ export class MyMovingObject extends CGFobject {
         this.initBuffers();
 
         this.speed = 0.0;
+        this.speedFactor = 1.0;
         this.position = [0.0, 0.0, 0.0];
         this.orientation = 0.0;
     }
@@ -46,11 +47,11 @@ export class MyMovingObject extends CGFobject {
         this.initGLBuffers();
     }
 
-    update(){
+    update(){        
         let directionVector = [0.0, 0.0, 0.0];
 
-        directionVector[0] = Math.sin(this.orientation) * this.speed;
-        directionVector[2] = Math.cos(this.orientation) * this.speed;
+        directionVector[0] = Math.sin(this.orientation) * this.speed * this.speedFactor;
+        directionVector[2] = Math.cos(this.orientation) * this.speed * this.speedFactor;
 
         this.position[0] = this.position[0] + directionVector[0];
         this.position[1] = this.position[1] + directionVector[1];
