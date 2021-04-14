@@ -245,7 +245,7 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
         this.cylinderAppearance.apply();
 
-        this.myCylinder.display();
+        // this.myCylinder.display();
 
         this.popMatrix();
 
@@ -266,7 +266,7 @@ export class MyScene extends CGFscene {
         this.multMatrix(rotateSphere);  // Rotate the sphere so that it shows Europe by default
 
         //This sphere does not have defined texture coordinates
-        // this.incompleteSphere.display();
+        this.incompleteSphere.display();
 
         this.popMatrix();
     }
