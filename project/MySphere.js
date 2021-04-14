@@ -32,6 +32,9 @@ export class MySphere extends CGFobject {
     var thetaInc = (2 * Math.PI) / this.longDivs;
     var latVertices = this.longDivs + 1;
 
+    var texCoordIncrementY = 1.0 / this.latDivs;
+    var texCoordIncrementX  = 1.0 / this.longDivs;
+
     // build an all-around stack at a time, starting on "north pole" and proceeding "south"
     for (let latitude = 0; latitude <= this.latDivs; latitude++) {
       var sinPhi = Math.sin(phi);
@@ -64,12 +67,14 @@ export class MySphere extends CGFobject {
         // in a sphere of radius equal to one, the vector length is one.
         // therefore, the value of the normal is equal to the position vectro
         this.normals.push(x, y, z);
-        theta += thetaInc;
 
         //--- Texture Coordinates
-        // To be done... 
+        // SPHERE BEING DRAWN FROM TOP DOWN AND FROM RIGHT TO LEFT
+       
+        this.texCoords.push(texCoordIncrementX * longitude, texCoordIncrementY * latitude);
+
         // May need some additional code also in the beginning of the function.
-        
+        theta += thetaInc;
       }
       phi += phiInc;
     }
@@ -78,4 +83,5 @@ export class MySphere extends CGFobject {
     this.primitiveType = this.scene.gl.TRIANGLES;
     this.initGLBuffers();
   }
+
 }

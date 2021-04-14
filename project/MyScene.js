@@ -2,6 +2,7 @@ import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/
 import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
 import { MyCubeMap } from "./MyCubeMap.js";
+import { MyCylinder } from "./MyCylinder.js";
 
 /**
 * MyScene
@@ -44,6 +45,8 @@ export class MyScene extends CGFscene {
         this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
         this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz
 
+        // Sphere Texture
+        this.sphereTexture = new CGFtexture(this, 'images/earth.jpg');
 
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
         this.arrTextures2 = [this.texture2_1, this.texture2_2, this.texture2_3, this.texture2_4, this.texture2_5, this.texture2_6];
@@ -62,6 +65,7 @@ export class MyScene extends CGFscene {
         this.incompleteSphere = new MySphere(this, 16, 8);
         this.myMovingObject = new MyMovingObject(this);
         this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
+        this.myCylinder = new MyCylinder(this, 16);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -75,6 +79,14 @@ export class MyScene extends CGFscene {
 		this.sphereAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
 		this.sphereAppearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.sphereAppearance.setShininess(120);
+        this.sphereAppearance.setTexture(this.sphereTexture);
+
+        this.cylinderAppearance = new CGFappearance(this);
+		this.cylinderAppearance.setAmbient(0.3, 0.3, 0.3, 1);
+		this.cylinderAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.cylinderAppearance.setSpecular(0.0, 0.0, 0.0, 1);
+		this.cylinderAppearance.setShininess(10);
+        this.cylinderAppearance.setTexture(this.sphereTexture);
 
 
         //Objects connected to MyInterface
@@ -206,12 +218,7 @@ export class MyScene extends CGFscene {
         if (this.displayAxis)
             this.axis.display();
 
-        this.sphereAppearance.apply();
-        // ---- BEGIN Primitive drawing section
-
-        //This sphere does not have defined texture coordinates
-        // this.incompleteSphere.display();
-
+        // DRAW MOVING OBJECT
         this.pushMatrix();
 
         var rotateMovingObject = [
@@ -233,6 +240,34 @@ export class MyScene extends CGFscene {
 
         this.myMovingObject.display();
         this.popMatrix();
-        // ---- END Primitive drawing section
+
+        // DRAW CYLINDER
+        this.pushMatrix();
+        this.cylinderAppearance.apply();
+
+        this.myCylinder.display();
+
+        this.popMatrix();
+
+        // DRAW SPHERE
+        this.pushMatrix();
+
+        this.sphereAppearance.apply();
+
+        var sphereAngleInDegrees = 140;
+        var sphereRotationAngle = Math.PI * sphereAngleInDegrees / 180;
+        var rotateSphere = [
+            Math.cos(sphereRotationAngle), 0, -Math.sin(sphereRotationAngle), 0,
+            0, 1, 0, 0,
+            Math.sin(sphereRotationAngle), 0, Math.cos(sphereRotationAngle), 0,
+            0, 0, 0, 1
+        ];
+
+        this.multMatrix(rotateSphere);  // Rotate the sphere so that it shows Europe by default
+
+        //This sphere does not have defined texture coordinates
+        // this.incompleteSphere.display();
+
+        this.popMatrix();
     }
 }
