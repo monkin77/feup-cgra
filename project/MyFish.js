@@ -142,27 +142,31 @@ export class MyFish extends CGFobject {
         // Draw Right Fin
         this.scene.pushMatrix();
 
+        let finScaleFator = 0.5;
+        let triangleSmallSideLength = finScaleFator *  Math.sqrt(2) / 2;   // the smallTriangle is isosceles
+        let triangleSmallHypotenuse = finScaleFator *2;
+
         let scaleFin = [
-            0.5, 0, 0, 0,
-            0, 0.5, 0, 0,
-            0, 0, 0.5, 0,
+            finScaleFator, 0, 0, 0,
+            0, finScaleFator, 0, 0,
+            0, 0, finScaleFator, 0,
             0, 0, 0, 1
         ]
 
-        rotateAngle = Math.PI * 45 / 180;
+        let rotateAroundXAngle = Math.PI * 45 / 180;
 
         let rotateFinAroundX = [
             1, 0, 0, 0,
-            0, Math.cos(rotateAngle), Math.sin(rotateAngle), 0,
-            0, -Math.sin(rotateAngle), Math.cos(rotateAngle), 0,
+            0, Math.cos(rotateAroundXAngle), Math.sin(rotateAroundXAngle), 0,
+            0, -Math.sin(rotateAroundXAngle), Math.cos(rotateAroundXAngle), 0,
             0, 0, 0, 1
         ]
 
-        rotateAngle = Math.PI * 20 / 180;
+        let rotateAroundZAngle = Math.PI * 25 / 180;
 
         let rotateFinAroundZ = [
-            Math.cos(rotateAngle), Math.sin(rotateAngle), 0, 0,
-            -Math.sin(rotateAngle), Math.cos(rotateAngle), 0, 0,
+            Math.cos(rotateAroundZAngle), Math.sin(rotateAroundZAngle), 0, 0,
+            -Math.sin(rotateAroundZAngle), Math.cos(rotateAroundZAngle), 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1
         ]
@@ -171,7 +175,7 @@ export class MyFish extends CGFobject {
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
-            0.5*Math.cos(rotateAngle), -yScaleBody, 0, 1
+            0.6 + triangleSmallSideLength  * Math.cos(Math.PI/2 - rotateAroundZAngle), - ( 0.1 +  triangleSmallHypotenuse * Math.cos(rotateAroundXAngle) / 2), 0, 1
         ]
 
         this.scene.multMatrix(translateRightFin);
@@ -184,6 +188,28 @@ export class MyFish extends CGFobject {
         this.yellowMaterial.apply();
         this.rightFin.display();
         
+        this.scene.popMatrix();
+
+        // Draw left fin
+        this.scene.pushMatrix();
+
+        let scaleFinToInvert = [
+            -1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
+
+        this.scene.multMatrix(scaleFinToInvert);
+        this.scene.multMatrix(translateRightFin);
+        this.scene.multMatrix(scaleFin);
+        this.scene.multMatrix(rotateFinAroundX);
+        this.scene.multMatrix(rotateFinAroundZ);
+        this.scene.multMatrix(rotateAroundY);
+        this.scene.multMatrix(rotateAroundZ);
+
+        this.yellowMaterial.apply();
+        this.leftFin.display();
 
         this.scene.popMatrix();
     }

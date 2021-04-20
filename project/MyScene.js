@@ -197,8 +197,6 @@ export class MyScene extends CGFscene {
         this.applyViewMatrix();
         
         this.defaultAppearance.apply();
-
-        this.myFish.display();
         
         // SCALING CUBE MAP
         this.pushMatrix();
@@ -286,6 +284,15 @@ export class MyScene extends CGFscene {
 
         // This sphere does not have defined texture coordinates
         // this.incompleteSphere.display();
+
+        this.popMatrix();
+
+        // DRAW FISH
+        this.defaultAppearance.apply();
+        
+        this.pushMatrix();
+
+        this.myFish.display();
 
         this.popMatrix();
     }
