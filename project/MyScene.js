@@ -3,6 +3,7 @@ import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
 import { MyCubeMap } from "./MyCubeMap.js";
 import { MyCylinder } from "./MyCylinder.js";
+import { MyFish } from "./MyFish.js";
 
 /**
 * MyScene
@@ -66,6 +67,7 @@ export class MyScene extends CGFscene {
         this.myMovingObject = new MyMovingObject(this);
         this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
         this.myCylinder = new MyCylinder(this, 16);
+        this.myFish = new MyFish(this);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -196,6 +198,7 @@ export class MyScene extends CGFscene {
         
         this.defaultAppearance.apply();
 
+        this.myFish.display();
         
         // SCALING CUBE MAP
         this.pushMatrix();
@@ -281,8 +284,8 @@ export class MyScene extends CGFscene {
 
         this.multMatrix(rotateSphere);  // Rotate the sphere so that it shows Europe by default
 
-        //This sphere does not have defined texture coordinates
-        this.incompleteSphere.display();
+        // This sphere does not have defined texture coordinates
+        // this.incompleteSphere.display();
 
         this.popMatrix();
     }
