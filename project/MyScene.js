@@ -46,14 +46,11 @@ export class MyScene extends CGFscene {
         this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
         this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz
 
-        // Sphere Texture
         this.sphereTexture = new CGFtexture(this, 'images/earth.jpg');
 
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
         this.arrTextures2 = [this.texture2_1, this.texture2_2, this.texture2_3, this.texture2_4, this.texture2_5, this.texture2_6];
-
         this.myCubeMapTextures = [this.arrTextures, this.arrTextures2];
-
         this.myCubeMapTextureSelector = 0;  // variable that chooses the current texture
 
         this.myCubeMapTexturesList = {  // Object interface variables
@@ -89,7 +86,6 @@ export class MyScene extends CGFscene {
 		this.cylinderAppearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.cylinderAppearance.setShininess(10);
         this.cylinderAppearance.setTexture(this.sphereTexture);
-
 
         this.scaleFactor = 1;
         this.speedFactor = 1;
@@ -287,10 +283,9 @@ export class MyScene extends CGFscene {
 
         this.popMatrix();
 
-        // DRAW FISH
-        this.defaultAppearance.apply();
-        
+        // DRAW FISH        
         this.pushMatrix();
+        this.defaultAppearance.apply();
 
         this.myFish.display();
 
