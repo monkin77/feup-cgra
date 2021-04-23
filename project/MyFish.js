@@ -33,7 +33,7 @@ export class MyFish extends CGFobject {
     }
 
     initTextures(scene){
-        this.bodyTexture = new CGFtexture(scene, 'images/earth.jpg');
+        this.bodyTexture = new CGFtexture(scene, 'images/fish_img/fishScales1.jpg');
     }
 
     initMaterials(scene){
@@ -47,11 +47,11 @@ export class MyFish extends CGFobject {
         this.eyeMaterial.setTexture(this.eyeTexture);
         this.eyeMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
-        this.yellowMaterial = new CGFappearance(scene);
-        this.yellowMaterial.setAmbient(1, 0, 0, 1.0);
-        this.yellowMaterial.setDiffuse(1, 0, 0, 1.0);
-        this.yellowMaterial.setSpecular(0, 0, 0, 1.0);
-        this.yellowMaterial.setShininess(10.0);
+        this.redMaterial = new CGFappearance(scene);
+        this.redMaterial.setAmbient(1, 0, 0, 1.0);
+        this.redMaterial.setDiffuse(0.7, 0, 0, 1.0);
+        this.redMaterial.setSpecular(0, 0, 0, 1.0);
+        this.redMaterial.setShininess(10.0);
 
         this.bodyMaterial = new CGFappearance(scene);
         this.bodyMaterial.setAmbient(0.7, 0.7, 0.7, 1.0);
@@ -62,7 +62,8 @@ export class MyFish extends CGFobject {
     }
 
     initShaders(scene){
-        this.bodyShader = new CGFshader(this.scene.gl, "shaders/texture1.vert", "shaders/texture1.frag");
+        this.bodyShader = new CGFshader(this.scene.gl, "shaders/fishBodyShader.vert", "shaders/fishBodyShader.frag");
+        this.eyeShader = new CGFshader(this.scene.gl, "shaders/fishEyeShader.vert", "shaders/fishEyeShader.frag");
     }
 
     display(){
@@ -87,7 +88,7 @@ export class MyFish extends CGFobject {
         this.body.display();
         this.scene.popMatrix();
 
-        this.scene.setActiveShader(this.scene.defaultShader);   // reset to default shader
+        this.scene.setActiveShader(this.eyeShader);   // reset to default shader
 
         // Draw Right Eye
         this.scene.pushMatrix();
@@ -108,9 +109,18 @@ export class MyFish extends CGFobject {
             0, 0, 1, 0,
             Math.cos(rotateAngle)*xScaleBody*ellipseCompensation, Math.sin(rotateAngle)*yScaleBody*ellipseCompensation, 0.5, 1,
         ]
+
+        let rotateEyeAngle = Math.PI*25 / 180;
+        let rotateEyeAroundY = [
+            Math.cos(-rotateEyeAngle), 0, -Math.sin(-rotateEyeAngle), 0,
+            0, 1, 0, 0,
+            Math.sin(-rotateEyeAngle), 0, Math.cos(-rotateEyeAngle), 0,
+            0, 0, 0, 1
+        ]
     
         this.scene.multMatrix(translateRightEye);
         this.scene.multMatrix(scaleEye);
+        this.scene.multMatrix(rotateEyeAroundY);    // rotate the eye slightly to the front (fish looks to the front)
 
         this.eyeMaterial.apply();
 
@@ -127,13 +137,23 @@ export class MyFish extends CGFobject {
             -Math.cos(rotateAngle)*xScaleBody*ellipseCompensation, Math.sin(rotateAngle)*yScaleBody*ellipseCompensation, 0.5, 1,
         ]
 
+        rotateEyeAroundY = [
+            Math.cos(rotateEyeAngle), 0, -Math.sin(rotateEyeAngle), 0,
+            0, 1, 0, 0,
+            Math.sin(rotateEyeAngle), 0, Math.cos(rotateEyeAngle), 0,
+            0, 0, 0, 1
+        ]
+
         this.scene.multMatrix(translateBackEye);
         this.scene.multMatrix(scaleEye);
+        this.scene.multMatrix(rotateEyeAroundY);
 
         this.eyeMaterial.apply();
         this.leftEye.display();
 
         this.scene.popMatrix();
+
+        this.scene.setActiveShader(this.scene.defaultShader);
 
         // Draw Tail
         this.scene.pushMatrix();
@@ -173,7 +193,7 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(rotateAroundY);
         this.scene.multMatrix(rotateAroundZ);
         
-        this.yellowMaterial.apply();
+        this.redMaterial.apply();
         this.tail.display();
         this.scene.popMatrix();
 
@@ -223,7 +243,7 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(rotateAroundY);
         this.scene.multMatrix(rotateAroundZ);
 
-        this.yellowMaterial.apply();
+        this.redMaterial.apply();
         this.rightFin.display();
         
         this.scene.popMatrix();
@@ -246,7 +266,7 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(rotateAroundY);
         this.scene.multMatrix(rotateAroundZ);
 
-        this.yellowMaterial.apply();
+        this.redMaterial.apply();
         this.leftFin.display();
 
         this.scene.popMatrix();
@@ -267,7 +287,7 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(rotateAroundY);
         this.scene.multMatrix(rotateAroundZ);
         
-        this.yellowMaterial.apply();
+        this.redMaterial.apply();
         this.dorsalFin.display();
         this.scene.popMatrix();
     }

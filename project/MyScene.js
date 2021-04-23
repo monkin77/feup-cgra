@@ -289,6 +289,24 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
         this.defaultAppearance.apply();
 
+        let fishScaleFactor = 1 /*0.25*/;
+        var scaleFish = [
+            fishScaleFactor, 0, 0, 0,
+            0, fishScaleFactor, 0, 0,
+            0, 0, fishScaleFactor, 0,
+            0, 0, 0, 1,
+        ];
+
+        var translateFish = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 3, 0, 1,
+        ];
+
+        this.multMatrix(scaleFish);
+        this.multMatrix(translateFish)
+        
         this.myFish.display();
 
         this.popMatrix();
