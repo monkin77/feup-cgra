@@ -64,13 +64,11 @@ export class ShaderScene extends CGFscene {
 		}
 
 		// Materials and textures initialization
-		
 		this.appearance = new CGFappearance(this);
 		this.appearance.setAmbient(0.3, 0.3, 0.3, 1);
 		this.appearance.setDiffuse(0.7, 0.7, 0.7, 1);
 		this.appearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.appearance.setShininess(120);
-
 		/*
 		this.texture = new CGFtexture(this, "textures/texture.jpg");
 		this.appearance.setTexture(this.texture);
@@ -83,12 +81,11 @@ export class ShaderScene extends CGFscene {
 		this.appearance.setTexture(this.waterMainTexture);
 		this.appearance.setTextureWrap('REPEAT', 'REPEAT');
 
-		this.waterAuxTexture = new CGFtexture(this, "textures/waterMap.jpg");
+		this.waterAuxTexture = new CGFtexture(this, 'textures/waterMap.jpg');
 
 
 
 		// shaders initialization
-
 		this.testShaders = [
 			new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"),
 			new CGFshader(this.gl, "shaders/uScale.vert", "shaders/uScale.frag"),

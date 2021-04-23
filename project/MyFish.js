@@ -28,6 +28,7 @@ export class MyFish extends CGFobject {
         this.tail = new MyTriangleSmall(scene);
         this.rightFin = new MyTriangleSmall(scene);
         this.leftFin = new MyTriangleSmall(scene);
+        this.dorsalFin = new MyTriangleSmall(scene);
         console.log("scene: ", this.scene);
     }
 
@@ -36,10 +37,20 @@ export class MyFish extends CGFobject {
     }
 
     initMaterials(scene){
+        this.eyeTexture = new CGFtexture(scene, 'images/earth.jpg');
+
+        this.eyeMaterial = new CGFappearance(scene);
+        this.eyeMaterial.setAmbient(1, 1, 1, 1.0);
+        this.eyeMaterial.setDiffuse(1, 1, 1, 1.0);
+        this.eyeMaterial.setSpecular(0, 0, 0, 1.0);
+        this.eyeMaterial.setShininess(10.0);
+        this.eyeMaterial.setTexture(this.eyeTexture);
+        this.eyeMaterial.setTextureWrap('REPEAT', 'REPEAT');
+
         this.yellowMaterial = new CGFappearance(scene);
-        this.yellowMaterial.setAmbient(0.2, 0.2, 0, 1.0);
-        this.yellowMaterial.setDiffuse(0, 0, 0, 1.0);
-        this.yellowMaterial.setSpecular(1.0, 1.0, 0, 1.0);
+        this.yellowMaterial.setAmbient(1, 0, 0, 1.0);
+        this.yellowMaterial.setDiffuse(1, 0, 0, 1.0);
+        this.yellowMaterial.setSpecular(0, 0, 0, 1.0);
         this.yellowMaterial.setShininess(10.0);
 
         this.bodyMaterial = new CGFappearance(scene);
@@ -100,7 +111,8 @@ export class MyFish extends CGFobject {
     
         this.scene.multMatrix(translateRightEye);
         this.scene.multMatrix(scaleEye);
-        this.yellowMaterial.apply();
+
+        this.eyeMaterial.apply();
 
         this.rightEye.display();
         this.scene.popMatrix();
@@ -117,7 +129,10 @@ export class MyFish extends CGFobject {
 
         this.scene.multMatrix(translateBackEye);
         this.scene.multMatrix(scaleEye);
+
+        this.eyeMaterial.apply();
         this.leftEye.display();
+
         this.scene.popMatrix();
 
         // Draw Tail
@@ -234,6 +249,26 @@ export class MyFish extends CGFobject {
         this.yellowMaterial.apply();
         this.leftFin.display();
 
+        this.scene.popMatrix();
+
+        // Draw Dorsal Fin
+        this.scene.pushMatrix();
+
+
+        let translateDorsalFin = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, yScaleBody - 0.05, -finScaleFator / 2, 1
+        ]
+
+        this.scene.multMatrix(translateDorsalFin);
+        this.scene.multMatrix(scaleFin);
+        this.scene.multMatrix(rotateAroundY);
+        this.scene.multMatrix(rotateAroundZ);
+        
+        this.yellowMaterial.apply();
+        this.dorsalFin.display();
         this.scene.popMatrix();
     }
 
