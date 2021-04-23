@@ -30,6 +30,14 @@ export class MyFish extends CGFobject {
         this.leftFin = new MyTriangleSmall(scene);
         this.dorsalFin = new MyTriangleSmall(scene);
         console.log("scene: ", this.scene);
+
+        this.tailInclination = 0;
+        this.maxTailInclination = 20 * Math.PI / 180;
+        this.tailIncrement = (this.maxTailInclination / 20) * 4;    // 20 -> refresh rate | 4 -> number of moves per second
+
+        this.finsInclination = 0;
+        this.maxFinsInclination = 20 * Math.PI / 180;
+        this.finsIncrement = (this.maxFinsInclination / 20) * 4;    // 20 -> refresh rate | 4 -> number of moves per second
     }
 
     initTextures(scene){
@@ -64,6 +72,18 @@ export class MyFish extends CGFobject {
     initShaders(scene){
         this.bodyShader = new CGFshader(this.scene.gl, "shaders/fishBodyShader.vert", "shaders/fishBodyShader.frag");
         this.eyeShader = new CGFshader(this.scene.gl, "shaders/fishEyeShader.vert", "shaders/fishEyeShader.frag");
+    }
+
+    update = () => {
+        if(Math.abs(this.tailInclination + this.tailIncrement) > this.maxTailInclination){
+            this.tailIncrement *= -1;
+        }
+        if(Math.abs(this.finsInclination + this.finsIncrement) > this.maxFinsInclination){
+            this.finsIncrement *= -1;
+        }
+
+        this.tailInclination += this.tailIncrement; 
+        this.finsInclination += this.finsIncrement;
     }
 
     display(){
@@ -135,14 +155,14 @@ export class MyFish extends CGFobject {
             0, 1, 0, 0,
             0, 0, 1, 0,
             -Math.cos(rotateAngle)*xScaleBody*ellipseCompensation, Math.sin(rotateAngle)*yScaleBody*ellipseCompensation, 0.5, 1,
-        ]
+        ];
 
         rotateEyeAroundY = [
             Math.cos(rotateEyeAngle), 0, -Math.sin(rotateEyeAngle), 0,
             0, 1, 0, 0,
             Math.sin(rotateEyeAngle), 0, Math.cos(rotateEyeAngle), 0,
             0, 0, 0, 1
-        ]
+        ];
 
         this.scene.multMatrix(translateBackEye);
         this.scene.multMatrix(scaleEye);
@@ -165,33 +185,51 @@ export class MyFish extends CGFobject {
             -Math.sin(rotateAngle), Math.cos(rotateAngle), 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1
-        ]
+        ];
 
         let rotateAroundY = [
             Math.cos(rotateAngle), 0, -Math.sin(rotateAngle), 0,
             0, 1, 0, 0,
             Math.sin(rotateAngle), 0, Math.cos(rotateAngle), 0,
             0, 0, 0, 1
-        ]
+        ];
 
         let translateTail = [
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
-            0, 0, -2, 1
-        ]
+            0, 0, -1, 1
+        ];
         
         let scaleTail = [
             1, 0, 0, 0,
             0, yScaleBody, 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1,
-        ]
+        ];
+
+        let rotateTailAnimation = [
+            Math.cos(this.tailInclination), 0, -Math.sin(this.tailInclination), 0,
+            0, 1, 0, 0,
+            Math.sin(this.tailInclination), 0, Math.cos(this.tailInclination), 0,
+            0, 0, 0, 1
+        ];
+
+        let translateTailToOrigin = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            0, 0, -1, 1,
+        ];
         
-        this.scene.multMatrix(scaleTail);
-        this.scene.multMatrix(translateTail);
-        this.scene.multMatrix(rotateAroundY);
-        this.scene.multMatrix(rotateAroundZ);
+        
+        this.scene.multMatrix(scaleTail);   // 6
+        this.scene.multMatrix(translateTail);   // 5 
+        this.scene.multMatrix(rotateTailAnimation);     // 4
+        this.scene.multMatrix(translateTailToOrigin);   // 3
+        this.scene.multMatrix(rotateAroundY);   // 2
+        this.scene.multMatrix(rotateAroundZ);   // 1
+
         
         this.redMaterial.apply();
         this.tail.display();
@@ -236,8 +274,32 @@ export class MyFish extends CGFobject {
             0.6 + triangleSmallSideLength  * Math.cos(Math.PI/2 - rotateAroundZAngle), - ( 0.1 +  triangleSmallHypotenuse * Math.cos(rotateAroundXAngle) / 2), 0, 1
         ]
 
+        let rotateFinAnimation = [
+            Math.cos(this.finsInclination), Math.sin(this.finsInclination), 0, 0,
+            -Math.sin(this.finsInclination), Math.cos(this.finsInclination), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
+
+        let translateFinToOrigin = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            Math.sin(rotateAroundZAngle), - Math.cos(rotateAroundZAngle) * Math.cos(rotateAroundXAngle), -Math.sin(rotateAroundXAngle), 1,
+        ];
+
+        let invertTranlationToOrigin = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            -Math.sin(rotateAroundZAngle), Math.cos(rotateAroundZAngle) * Math.cos(rotateAroundXAngle), Math.sin(rotateAroundXAngle), 1,
+        ];
+
         this.scene.multMatrix(translateRightFin);
         this.scene.multMatrix(scaleFin);
+        this.scene.multMatrix(invertTranlationToOrigin);
+        this.scene.multMatrix(rotateFinAnimation);
+        this.scene.multMatrix(translateFinToOrigin);
         this.scene.multMatrix(rotateFinAroundX);
         this.scene.multMatrix(rotateFinAroundZ);
         this.scene.multMatrix(rotateAroundY);
@@ -261,12 +323,14 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(scaleFinToInvert);
         this.scene.multMatrix(translateRightFin);
         this.scene.multMatrix(scaleFin);
+        this.scene.multMatrix(invertTranlationToOrigin);
+        this.scene.multMatrix(rotateFinAnimation);
+        this.scene.multMatrix(translateFinToOrigin);
         this.scene.multMatrix(rotateFinAroundX);
         this.scene.multMatrix(rotateFinAroundZ);
         this.scene.multMatrix(rotateAroundY);
         this.scene.multMatrix(rotateAroundZ);
 
-        this.redMaterial.apply();
         this.leftFin.display();
 
         this.scene.popMatrix();
