@@ -1,4 +1,4 @@
-import { CGFobject, CGFappearance } from '../lib/CGF.js';
+import { CGFobject, CGFappearance, CGFshader, CGFtexture } from '../lib/CGF.js';
 import { MySphere } from './MySphere.js';
 import { MyTriangleSmall } from './MyTriangleSmall.js';
 
@@ -11,7 +11,9 @@ export class MyFish extends CGFobject {
     constructor(scene){
         super(scene);
         this.init(scene);
+        this.initTextures(scene);
         this.initMaterials(scene);
+        this.initShaders(scene);
 
         this.speed = 0.0;
         this.speedFactor = 1.0;
@@ -26,6 +28,11 @@ export class MyFish extends CGFobject {
         this.tail = new MyTriangleSmall(scene);
         this.rightFin = new MyTriangleSmall(scene);
         this.leftFin = new MyTriangleSmall(scene);
+        console.log("scene: ", this.scene);
+    }
+
+    initTextures(scene){
+        this.bodyTexture = new CGFtexture(scene, 'images/earth.jpg');
     }
 
     initMaterials(scene){
@@ -34,12 +41,26 @@ export class MyFish extends CGFobject {
         this.yellowMaterial.setDiffuse(0, 0, 0, 1.0);
         this.yellowMaterial.setSpecular(1.0, 1.0, 0, 1.0);
         this.yellowMaterial.setShininess(10.0);
+
+        this.bodyMaterial = new CGFappearance(scene);
+        this.bodyMaterial.setAmbient(0.7, 0.7, 0.7, 1.0);
+        this.bodyMaterial.setDiffuse(0.7, 0.7, 0.7, 1.0);
+        this.bodyMaterial.setSpecular(0, 0, 0, 1.0);
+        this.bodyMaterial.setShininess(10.0);
+        this.bodyMaterial.setTexture(this.bodyTexture);
+    }
+
+    initShaders(scene){
+        this.bodyShader = new CGFshader(this.scene.gl, "shaders/texture1.vert", "shaders/texture1.frag");
     }
 
     display(){
-
         // Draw Body
         this.scene.pushMatrix();  //push Identity Matrix
+
+        this.bodyMaterial.apply();
+        this.scene.setActiveShader(this.bodyShader);
+        
         let xScaleBody = 0.6;
         let yScaleBody = 0.8;
 
@@ -54,6 +75,8 @@ export class MyFish extends CGFobject {
 
         this.body.display();
         this.scene.popMatrix();
+
+        this.scene.setActiveShader(this.scene.defaultShader);   // reset to default shader
 
         // Draw Right Eye
         this.scene.pushMatrix();
