@@ -46,6 +46,11 @@ export class MyScene extends CGFscene {
         this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
         this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz
 
+        // Sea Textures
+        this.seaFloorTexture = new CGFtexture(this, 'images/sand.png');  // floor
+        this.seaFloorMapTexture = new CGFtexture(this, 'images/sandMap.png');   // floor map
+        
+
         this.sphereTexture = new CGFtexture(this, 'images/earth.jpg');
 
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
@@ -55,7 +60,7 @@ export class MyScene extends CGFscene {
 
         this.myCubeMapTexturesList = {  // Object interface variables
             'Default': 0,
-            'Custom 1': 1
+            'Custom 1': 1,
         } 
 
         //Initialize scene objects
@@ -87,9 +92,10 @@ export class MyScene extends CGFscene {
 		this.cylinderAppearance.setShininess(10);
         this.cylinderAppearance.setTexture(this.sphereTexture);
 
+
         this.scaleFactor = 1;
         this.speedFactor = 1;
-        //Objects connected to MyInterface
+
         this.displayAxis = true;
     }
 

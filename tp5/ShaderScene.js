@@ -83,8 +83,6 @@ export class ShaderScene extends CGFscene {
 
 		this.waterAuxTexture = new CGFtexture(this, 'textures/waterMap.jpg');
 
-
-
 		// shaders initialization
 		this.testShaders = [
 			new CGFshader(this.gl, "shaders/flat.vert", "shaders/flat.frag"),
@@ -239,11 +237,12 @@ export class ShaderScene extends CGFscene {
 		// Draw axis
 		this.axis.display();
 
-		// aplly main appearance (including texture in default texture unit 0)
+		// apply main appearance (including texture in default texture unit 0)
 		this.appearance.apply();
 
 		// activate selected shader
 		this.setActiveShader(this.testShaders[this.selectedExampleShader]);
+		
 		this.pushMatrix();
 
 		// bind textures to send to the shaders

@@ -1,5 +1,6 @@
-import { CGFappearance, CGFobject } from "../lib/CGF.js";
+import { CGFappearance, CGFobject, CGFshader, CGFtexture } from "../lib/CGF.js";
 import { MyQuad } from './MyQuad.js';
+
 /**
  * MyCubeMap
  * @constructor
@@ -23,15 +24,30 @@ export class MyCubeMap extends CGFobject {
     }
 
     initMaterials(scene){
+
+        // Sea Textures
+        this.seaFloorTexture = new CGFtexture(this, 'images/sand.png');  // floor
+        this.seaFloorMapTexture = new CGFtexture(this, 'images/sandMap.png');   // floor map
+
         this.cubeMapMaterial = new CGFappearance(scene);
         this.cubeMapMaterial.setAmbient(0, 0, 0, 1);
         this.cubeMapMaterial.setDiffuse(0, 0, 0, 1);
         this.cubeMapMaterial.setSpecular(0, 0, 0, 1);
         this.cubeMapMaterial.setShininess(10.0);
         this.cubeMapMaterial.setEmission(1, 1, 1, 1);
-        // this.cubeMapMaterial.setTexture(this.textures[0]);
+        this.cubeMapMaterial.setTexture(this.textures[0]);
         this.cubeMapMaterial.setTextureWrap('REPEAT', 'REPEAT');
 
+        this.floorAppearance = new CGFappearance(scene);
+		this.floorAppearance.setAmbient(0.3, 0.3, 0.3, 1);
+		this.floorAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.floorAppearance.setSpecular(0.0, 0.0, 0.0, 1);
+		this.floorAppearance.setShininess(10);
+        this.floorAppearance.setTexture(this.seaFloorTexture);
+		this.floorAppearance.setTextureWrap('REPEAT', 'REPEAT');
+
+        this.seaFloorShader = new CGFshader(this.scene.gl, "shaders/mySeaFloor.vert", "shaders/mySeaFloor.frag");
+        this.seaFloorShader.setUniformsValues( {uSampler2: 1} );		// The uSampler is already sent by default
     }
 
     display(){
@@ -172,7 +188,9 @@ export class MyCubeMap extends CGFobject {
 
         this.scene.popMatrix();
 
-        //down
+        this.scene.setActiveShader(this.seaFloorShader);
+
+        // Down
         this.scene.pushMatrix();
 
         var translateDown = [
@@ -187,12 +205,22 @@ export class MyCubeMap extends CGFobject {
 
         this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_MAG_FILTER, this.scene.gl.NEAREST);
         
+        /*
         this.cubeMapMaterial.setTexture(this.textures[1]);
         this.cubeMapMaterial.apply();
+        */
+        this.cubeMapMaterial.setTexture(this.seaFloorTexture);
+
+        this.scene.seaFloorTexture.bind();
+		this.scene.seaFloorMapTexture.bind(1);
+
+        this.floorAppearance.apply();
 
         this.myQuad.display();
 
         this.scene.popMatrix();
+
+        this.scene.setActiveShader(this.scene.defaultShader);
     }
 	
 }
