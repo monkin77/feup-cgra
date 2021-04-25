@@ -37,7 +37,7 @@ export class MyFish extends CGFobject {
 
         this.finsInclination = 0;
         this.maxFinsInclination = 20 * Math.PI / 180;
-        this.finsIncrement = (this.maxFinsInclination / 20) * 4;    // 20 -> refresh rate | 4 -> number of moves per second
+        this.finsIncrement = (this.maxFinsInclination / 20) * 3;    // 20 -> refresh rate | 4 -> number of moves per second
     }
 
     initTextures(scene){
