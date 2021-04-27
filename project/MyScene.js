@@ -1,4 +1,4 @@
-import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
+import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture, CGFshader } from "../lib/CGF.js";
 import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
 import { MyCubeMap } from "./MyCubeMap.js";
@@ -63,6 +63,10 @@ export class MyScene extends CGFscene {
             'Custom 1': 1,
         } 
 
+        // shaders
+        this.seaFloorShader = new CGFshader(this.gl, "shaders/mySeaFloor.vert", "shaders/mySeaFloor.frag");
+        this.seaFloorShader.setUniformsValues( {uSampler2: 1} );		// The uSampler is already sent by default
+
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
@@ -92,6 +96,13 @@ export class MyScene extends CGFscene {
 		this.cylinderAppearance.setShininess(10);
         this.cylinderAppearance.setTexture(this.sphereTexture);
 
+        this.seaFloorAppearance = new CGFappearance(this);
+		this.seaFloorAppearance.setAmbient(0.3, 0.3, 0.3, 1);
+		this.seaFloorAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.seaFloorAppearance.setSpecular(0.0, 0.0, 0.0, 1);
+		this.seaFloorAppearance.setShininess(10);
+        this.seaFloorAppearance.setTexture(this.seaFloorTexture);
+		this.seaFloorAppearance.setTextureWrap('REPEAT', 'REPEAT');
 
         this.scaleFactor = 1;
         this.speedFactor = 1;
@@ -140,6 +151,7 @@ export class MyScene extends CGFscene {
     reset(){
         this.myMovingObject.speed = 0;
         this.myMovingObject.orientation = 0;
+        this.myMovingObject.position = [0, 0, 0];
     }
 
     checkKeys(){
@@ -172,8 +184,9 @@ export class MyScene extends CGFscene {
             this.turn(0.1);
         }
 
-        if(keysPressed)
-            console.log(text);
+        if(this.gui.isKeyPressed("KeyR")) {
+            this.reset();
+        }
     }
 
     // Update speed factor attribute of Objects
