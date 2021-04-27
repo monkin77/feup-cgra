@@ -19,8 +19,9 @@ void main() {
 
 	vec4 position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
 
+	
 	if(heightMapColor.b > 0.49){
-		position += offset;
+		position += offset * 0.25;
 	}
 
 	gl_Position = position;
