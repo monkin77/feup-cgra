@@ -21,7 +21,7 @@ void main() {
 
 	
 	if(heightMapColor.b > 0.49){
-		position += offset * 0.25;
+		position += vec4(0, offset * 0.5, 0, 0);
 	}
 
 	gl_Position = position;
