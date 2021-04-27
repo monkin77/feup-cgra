@@ -4,6 +4,8 @@ import { MySphere } from "./MySphere.js";
 import { MyCubeMap } from "./MyCubeMap.js";
 import { MyCylinder } from "./MyCylinder.js";
 import { MyFish } from "./MyFish.js";
+import {MyPlane} from "./MyPlane.js";
+import { MySeaFloor } from "./MySeaFloor.js";
 
 /**
 * MyScene
@@ -44,12 +46,7 @@ export class MyScene extends CGFscene {
         this.texture2_3 = new CGFtexture(this, 'images/my_img_1/nz.png');       // nz
         this.texture2_4 = new CGFtexture(this, 'images/my_img_1/px.png');      // px
         this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
-        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz
-
-        // Sea Textures
-        this.seaFloorTexture = new CGFtexture(this, 'images/sand.png');  // floor
-        this.seaFloorMapTexture = new CGFtexture(this, 'images/sandMap.png');   // floor map
-        
+        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz        
 
         this.sphereTexture = new CGFtexture(this, 'images/earth.jpg');
 
@@ -63,10 +60,6 @@ export class MyScene extends CGFscene {
             'Custom 1': 1,
         } 
 
-        // shaders
-        this.seaFloorShader = new CGFshader(this.gl, "shaders/mySeaFloor.vert", "shaders/mySeaFloor.frag");
-        this.seaFloorShader.setUniformsValues( {uSampler2: 1} );		// The uSampler is already sent by default
-
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
@@ -74,6 +67,7 @@ export class MyScene extends CGFscene {
         this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
+        this.mySeaFloor = new MySeaFloor(this, 20, 50, 0.25);
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -95,14 +89,6 @@ export class MyScene extends CGFscene {
 		this.cylinderAppearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.cylinderAppearance.setShininess(10);
         this.cylinderAppearance.setTexture(this.sphereTexture);
-
-        this.seaFloorAppearance = new CGFappearance(this);
-		this.seaFloorAppearance.setAmbient(0.3, 0.3, 0.3, 1);
-		this.seaFloorAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
-		this.seaFloorAppearance.setSpecular(0.0, 0.0, 0.0, 1);
-		this.seaFloorAppearance.setShininess(10);
-        this.seaFloorAppearance.setTexture(this.seaFloorTexture);
-		this.seaFloorAppearance.setTextureWrap('REPEAT', 'REPEAT');
 
         this.scaleFactor = 1;
         this.speedFactor = 1;
@@ -274,7 +260,7 @@ export class MyScene extends CGFscene {
         this.multMatrix(rotateMovingObject);
         this.multMatrix(scaleMovingObject);
 
-        this.myMovingObject.display();
+        // this.myMovingObject.display();
         this.popMatrix();
 
         // DRAW CYLINDER
@@ -329,6 +315,13 @@ export class MyScene extends CGFscene {
         this.multMatrix(translateFish)
         
         this.myFish.display();
+
+        this.popMatrix();
+
+        // Draw Sea floor
+        this.pushMatrix();
+
+        this.mySeaFloor.display();
 
         this.popMatrix();
     }

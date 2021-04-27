@@ -14,10 +14,16 @@ varying vec2 vTextureCoord2;
 uniform sampler2D uSampler2;
 
 void main() {
-	vec4 heightMapColor = texture2D(uSampler2, vTextureCoord); 
-	vec3 heightMultiplier = aVertexNormal * heightMapColor.b * 0.5;
+	vec4 heightMapColor = texture2D(uSampler2, aTextureCoord); 
+	vec3 heightMultiplier = aVertexNormal * heightMapColor.r * 0.1;
 
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition + heightMultiplier, 1.0);
+	vec4 position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+
+	if(heightMapColor.b > 0.49){
+		position += offset;
+	}
+
+	gl_Position = position;
 
 	vTextureCoord = aTextureCoord;    // send the varying texture coords
     vTextureCoord2 = aTextureCoord;
