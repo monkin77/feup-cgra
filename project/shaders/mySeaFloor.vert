@@ -18,7 +18,6 @@ void main() {
 	vec3 heightMultiplier = aVertexNormal * heightMapColor.r * 0.1;
 
 	vec4 position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-
 	
 	if(heightMapColor.b > 0.49){
 		position += vec4(0, offset * 0.5, 0, 0);
@@ -29,4 +28,5 @@ void main() {
 	vTextureCoord = aTextureCoord;    // send the varying texture coords
     vTextureCoord2 = aTextureCoord;
 }
+
 

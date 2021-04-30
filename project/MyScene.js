@@ -46,18 +46,27 @@ export class MyScene extends CGFscene {
         this.texture2_3 = new CGFtexture(this, 'images/my_img_1/nz.png');       // nz
         this.texture2_4 = new CGFtexture(this, 'images/my_img_1/px.png');      // px
         this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
-        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz        
+        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz       
+        
+        this.texture3_1 = new CGFtexture(this, 'images/underwater_cubemap/left.jpg');       // nx
+        this.texture3_2 = new CGFtexture(this, 'images/underwater_cubemap/bottom.jpg');     // ny
+        this.texture3_3 = new CGFtexture(this, 'images/underwater_cubemap/back.jpg');       // nz
+        this.texture3_4 = new CGFtexture(this, 'images/underwater_cubemap/right.jpg');      // px
+        this.texture3_5 = new CGFtexture(this, 'images/underwater_cubemap/top.jpg');        // py
+        this.texture3_6 = new CGFtexture(this ,'images/underwater_cubemap/front.jpg');      // pz     
 
         this.sphereTexture = new CGFtexture(this, 'images/earth.jpg');
 
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
         this.arrTextures2 = [this.texture2_1, this.texture2_2, this.texture2_3, this.texture2_4, this.texture2_5, this.texture2_6];
-        this.myCubeMapTextures = [this.arrTextures, this.arrTextures2];
+        this.arrTextures3 =  [this.texture3_1, this.texture3_2, this.texture3_3, this.texture3_4, this.texture3_5, this.texture3_6];
+        this.myCubeMapTextures = [this.arrTextures, this.arrTextures2, this.arrTextures3];
         this.myCubeMapTextureSelector = 0;  // variable that chooses the current texture
 
         this.myCubeMapTexturesList = {  // Object interface variables
             'Default': 0,
             'Custom 1': 1,
+            'Underwater': 2,
         } 
 
         //Initialize scene objects
@@ -68,6 +77,23 @@ export class MyScene extends CGFscene {
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
         this.mySeaFloor = new MySeaFloor(this, 20, 50, 1);
+
+        this.myWaterSurface = new MyPlane(this, 200);
+
+        this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
+        this.waterSurfaceShader.setUniformsValues( {uSampler2: 1, offset: 0} );		// The uSampler is already sent by default
+
+        this.waterSurfaceTexture = new CGFtexture(this, 'images/pier.jpg'); 
+        this.waterSurfaceDistortion = new CGFtexture(this, 'images/distortionmap.png');
+
+        this.waterSurfaceAppearance = new CGFappearance(this);
+		this.waterSurfaceAppearance.setAmbient(0.3, 0.3, 0.3, 1);
+		this.waterSurfaceAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.waterSurfaceAppearance.setSpecular(0.0, 0.0, 0.0, 1);
+		this.waterSurfaceAppearance.setShininess(10);
+        this.waterSurfaceAppearance.setTexture(this.waterSurfaceTexture);
+		this.waterSurfaceAppearance.setTextureWrap('REPEAT', 'REPEAT');
+
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -89,6 +115,7 @@ export class MyScene extends CGFscene {
 		this.cylinderAppearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.cylinderAppearance.setShininess(10);
         this.cylinderAppearance.setTexture(this.sphereTexture);
+
 
         this.scaleFactor = 1;
         this.speedFactor = 1;
@@ -185,6 +212,7 @@ export class MyScene extends CGFscene {
         this.checkKeys();
         this.myMovingObject.update();
         this.myFish.update();
+        this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 
     display() {
@@ -324,5 +352,29 @@ export class MyScene extends CGFscene {
         this.mySeaFloor.display();
 
         this.popMatrix();
+
+        // DRAW WATER SURFACE
+        this.pushMatrix();
+
+        this.setActiveShader(this.waterSurfaceShader);
+        
+        this.waterSurfaceTexture.bind();
+        this.waterSurfaceDistortion.bind(1);
+
+        this.waterSurfaceAppearance.apply();
+        
+        
+        this.translate(0, 10, 0);
+        this.rotate(Math.PI/2, 1, 0, 0);
+        this.scale(50, 50, 50);
+
+        this.myWaterSurface.display();
+
+        this.popMatrix();
+        
+        this.setActiveShader(this.defaultShader);
+
     }
+
+
 }
