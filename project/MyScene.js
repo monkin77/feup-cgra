@@ -6,6 +6,7 @@ import { MyCylinder } from "./MyCylinder.js";
 import { MyFish } from "./MyFish.js";
 import {MyPlane} from "./MyPlane.js";
 import { MySeaFloor } from "./MySeaFloor.js";
+import { MyRock } from "./MyRock.js";
 
 /**
 * MyScene
@@ -77,6 +78,7 @@ export class MyScene extends CGFscene {
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
         this.mySeaFloor = new MySeaFloor(this, 20, 50, 1);
+        this.myRock = new MyRock(this, 16, 8);
 
         this.myWaterSurface = new MyPlane(this, 200);
 
@@ -115,6 +117,12 @@ export class MyScene extends CGFscene {
 		this.cylinderAppearance.setSpecular(0.0, 0.0, 0.0, 1);
 		this.cylinderAppearance.setShininess(10);
         this.cylinderAppearance.setTexture(this.sphereTexture);
+
+        this.rockAppearance = new CGFappearance(this);
+        this.rockAppearance.setAmbient(0.4, 0.4, 0.4, 1);
+        this.rockAppearance.setDiffuse(0.4, 0.4, 0.4, 1);
+        this.rockAppearance.setSpecular(1, 1, 1, 1);
+        this.rockAppearance.setShininess(10);
 
 
         this.scaleFactor = 1;
@@ -372,6 +380,16 @@ export class MyScene extends CGFscene {
         this.popMatrix();
         
         this.setActiveShader(this.defaultShader);
+
+        // DRAW ROCK
+        this.pushMatrix();
+
+        this.translate(5, 0, 5);
+
+        this.rockAppearance.apply();
+        this.myRock.display();
+        
+        this.popMatrix();
 
     }
 
