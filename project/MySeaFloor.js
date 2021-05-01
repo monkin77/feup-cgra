@@ -26,7 +26,7 @@ export class MySeaFloor extends CGFobject {
 
         // Sea Textures
         this.seaFloorTexture = new CGFtexture(scene, 'images/sandShell.png');  // floor
-        this.seaFloorMapTexture = new CGFtexture(scene, 'images/sandShellMap.png');   // floor map
+        this.seaFloorMapTexture = new CGFtexture(scene, 'images/sandShellMap2.png');   // floor map
 
         this.seaFloorAppearance = new CGFappearance(scene);
 		this.seaFloorAppearance.setAmbient(0.3, 0.3, 0.3, 1);

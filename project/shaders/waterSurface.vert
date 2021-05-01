@@ -15,7 +15,7 @@ uniform sampler2D uSampler;
 uniform sampler2D uSampler2;
 
 void main() {
-    vec2 manipulatedTexCoord = mod( (aTextureCoord + vec2(0.0001*offset, 0.0001*offset)) / 2.0, vec2(1.0, 1.0) );
+    vec2 manipulatedTexCoord = mod( (aTextureCoord + vec2(0.00002*offset, 0.00002*offset)) / 2.0, vec2(1.0, 1.0) );
 
     float offsetR = texture2D(uSampler2, manipulatedTexCoord).r - 0.5;
     float offsetG = texture2D(uSampler2, manipulatedTexCoord).g - 0.5;

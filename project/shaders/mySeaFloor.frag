@@ -14,7 +14,7 @@ void main() {
 
 	/* Since the colorHeightMap values don't go higher than 0.6, we can use it as the upper bound in order augment the contrast	*/
 	if(filter1.r <= 0.6){
-		color = color - 1.0*vec4(0.6 - filter1.r, 0.6 - filter1.g, 0.6 - filter1.b, 0);	
+		color = color - 1.0*vec4(0.6 - filter1.r, 0.6 - filter1.r, 0.6 - filter1.r, 0);	
 	}
 
 	gl_FragColor = color;
