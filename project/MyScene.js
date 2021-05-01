@@ -7,6 +7,7 @@ import { MyFish } from "./MyFish.js";
 import {MyPlane} from "./MyPlane.js";
 import { MySeaFloor } from "./MySeaFloor.js";
 import { MyRock } from "./MyRock.js";
+import { MyRockSet } from "./MyRockSet.js";
 
 /**
 * MyScene
@@ -70,6 +71,9 @@ export class MyScene extends CGFscene {
             'Underwater': 2,
         } 
 
+        this.nestPosition = {x: 9, z: -18, radius: 5};  // position of the center of the Nest
+
+
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.incompleteSphere = new MySphere(this, 16, 8);
@@ -77,8 +81,11 @@ export class MyScene extends CGFscene {
         this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
-        this.mySeaFloor = new MySeaFloor(this, 20, 50, 1);
+        
         this.myRock = new MyRock(this, 16, 8);
+        this.myRockSet = new MyRockSet(this, 16, 8, 10, this.nestPosition);   
+
+        this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
 
         this.myWaterSurface = new MyPlane(this, 200);
 
@@ -381,15 +388,14 @@ export class MyScene extends CGFscene {
         
         this.setActiveShader(this.defaultShader);
 
-        // DRAW ROCK
+        // DRAW ROCK SET
         this.pushMatrix();
 
-        this.translate(5, 0, 5);
-
         this.rockAppearance.apply();
-        this.myRock.display();
         
-        this.popMatrix();
+        this.myRockSet.display();
+        
+        this.popMatrix(); 
 
     }
 

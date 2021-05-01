@@ -54,7 +54,11 @@ export class MyRock extends CGFobject {
         // therefore, the value of the normal is equal to the position vectro
         this.normals.push(x, y, z);
 
-        this.vertices.push(x, y, z);
+        let randomX = Math.random() / 2;  // entre 0 e 0.5
+        let randomY = Math.random() / 5;  // entre 0 e 0.2
+        let randomZ = Math.random() / 2;  // entre 0 e 0.5
+
+        this.vertices.push(x - randomX*x, y, z - randomZ*z);
 
         //--- Indices
         if (latitude < this.latDivs && longitude < this.longDivs) {
@@ -67,6 +71,7 @@ export class MyRock extends CGFobject {
           this.indices.push( current + 1, current, next);
           this.indices.push( current + 1, next, next +1);
         }
+        
 
 
         //--- Texture Coordinates
