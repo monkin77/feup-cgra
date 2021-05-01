@@ -17,8 +17,6 @@ uniform sampler2D uSampler2;
 void main() {
     vec2 manipulatedTexCoord = mod( (aTextureCoord + vec2(0.0001*offset, 0.0001*offset)) / 2.0, vec2(1.0, 1.0) );
 
-	vec4 heightMapColor = texture2D(uSampler2, aTextureCoord); 
-
     float offsetR = texture2D(uSampler2, manipulatedTexCoord).r - 0.5;
     float offsetG = texture2D(uSampler2, manipulatedTexCoord).g - 0.5;
 
@@ -26,15 +24,15 @@ void main() {
 
 	gl_Position = position;
 
-    if (aTextureCoord.s + offsetR >= 0.0 && aTextureCoord.s + offsetR <= 1.0 && aTextureCoord.t + offsetG >= 0.0 && aTextureCoord.t + offsetG <= 1.0) 
-        vTextureCoord = vec2(aTextureCoord.s + offsetR, aTextureCoord.t + offsetG);
-    else if (aTextureCoord.s + offsetR >= 0.0 && aTextureCoord.s + offsetR <= 1.0)
-        vTextureCoord = vec2(aTextureCoord.s + offsetR, aTextureCoord.t);
-    else if (aTextureCoord.t + offsetG >= 0.0 && aTextureCoord.t + offsetG <= 1.0)
-        vTextureCoord = vec2(aTextureCoord.s, aTextureCoord.t + offsetG);
-    else
-        vTextureCoord = vec2(aTextureCoord.s, aTextureCoord.t);
-
+    
+    if (aTextureCoord.s + offsetR < 0.0 || aTextureCoord.s + offsetR > 1.0 ) {
+        offsetR = 0.0;
+    } 
+    if (aTextureCoord.t + offsetG < 0.0 || aTextureCoord.t + offsetG > 1.0) {
+        offsetG = 0.0;
+    }
+    vTextureCoord = vec2(aTextureCoord.s + offsetR, aTextureCoord.t + offsetG);
+    
     vTextureCoord2 = aTextureCoord;
 }
 

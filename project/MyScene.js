@@ -363,7 +363,6 @@ export class MyScene extends CGFscene {
 
         this.waterSurfaceAppearance.apply();
         
-        
         this.translate(0, 10, 0);
         this.rotate(Math.PI/2, 1, 0, 0);
         this.scale(50, 50, 50);
