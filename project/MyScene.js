@@ -8,6 +8,7 @@ import {MyPlane} from "./MyPlane.js";
 import { MySeaFloor } from "./MySeaFloor.js";
 import { MyRock } from "./MyRock.js";
 import { MyRockSet } from "./MyRockSet.js";
+import { MyPillar } from "./MyPillar.js";
 
 /**
 * MyScene
@@ -81,13 +82,16 @@ export class MyScene extends CGFscene {
         this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
-        
         this.myRock = new MyRock(this, 16, 8);
         this.myRockSet = new MyRockSet(this, 16, 8, 10, this.nestPosition);   
-
         this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
-
         this.myWaterSurface = new MyPlane(this, 200);
+        this.myPillars = [ 
+            new MyPillar(this, 100, {x: 10, y: 0, z: 10}),
+            new MyPillar(this, 100, {x: -10, y: 0, z: -10}),
+            new MyPillar(this, 100, {x: 10, y: 0, z: -5}),
+            new MyPillar(this, 100, {x: -5, y: 0, z: 5}),
+        ];
 
         this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
         this.waterSurfaceShader.setUniformsValues( {uSampler2: 1, offset: 0} );		// The uSampler is already sent by default
@@ -396,6 +400,16 @@ export class MyScene extends CGFscene {
         this.myRockSet.display();
         
         this.popMatrix(); 
+
+        this.defaultAppearance.apply();
+
+        // DRAW PILLARS
+
+        for(let i = 0; i < this.myPillars.length; i++){
+            this.myPillars[i].display();
+        }
+        
+        this.defaultAppearance.apply();
 
     }
 

@@ -18,7 +18,6 @@ export class MyRockSet extends CGFobject {
     this.rocksPosition = [];
 
     this.init(scene, slices, stacks);
-    this.initBuffers();
   }
 
   init(scene, slices, stacks) {
