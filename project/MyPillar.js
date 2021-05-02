@@ -11,7 +11,6 @@ export class MyPillar extends CGFobject {
   }
 
   init(scene) {
-    console.log(scene);
     this.pillarTexture = new CGFtexture(scene, 'images/pillar/pillarTexture.jpg');
 
     this.pillarAppearance = new CGFappearance(scene);
@@ -35,8 +34,6 @@ export class MyPillar extends CGFobject {
     this.myCylinder.display();
 
     this.scene.popMatrix();
-
-    // this.scene.defaultAppearance.apply();
   }
 
 }

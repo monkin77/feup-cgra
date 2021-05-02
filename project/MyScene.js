@@ -9,6 +9,7 @@ import { MySeaFloor } from "./MySeaFloor.js";
 import { MyRock } from "./MyRock.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyPillar } from "./MyPillar.js";
+import { MyPlantSet } from "./MyPlantSet.js";
 
 /**
 * MyScene
@@ -92,6 +93,7 @@ export class MyScene extends CGFscene {
             new MyPillar(this, 100, {x: 10, y: 0, z: -5}),
             new MyPillar(this, 100, {x: -5, y: 0, z: 5}),
         ];
+        this.myPlantSet = new MyPlantSet(this, 4, 10, this.nestPosition)
 
         this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
         this.waterSurfaceShader.setUniformsValues( {uSampler2: 1, offset: 0} );		// The uSampler is already sent by default
@@ -410,6 +412,14 @@ export class MyScene extends CGFscene {
         }
         
         this.defaultAppearance.apply();
+
+        // DRAW PLANTS
+
+        this.pushMatrix();
+
+        this.myPlantSet.display();
+
+        this.popMatrix();
 
     }
 

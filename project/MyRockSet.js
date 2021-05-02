@@ -31,11 +31,11 @@ export class MyRockSet extends CGFobject {
 
         
         while(true) {
-            let randomX = Math.random() * 48 - 24;     // random between -25, 25
-            let randomZ = Math.random() * 48 - 24;
+            let randomXPos = Math.random() * 48 - 24;     // random between -25, 25
+            let randomZPos = Math.random() * 48 - 24;
 
-            if (Math.abs( Math.pow( (randomX - this.nestPosition.x), 2) + Math.pow( (randomZ - this.nestPosition.z), 2) ) > Math.pow(this.nestPosition.radius, 2)) {
-                this.rocksPosition.push( [randomX, randomZ] ); 
+            if (Math.abs( Math.pow( (randomXPos - this.nestPosition.x), 2) + Math.pow( (randomZPos - this.nestPosition.z), 2) ) > Math.pow(this.nestPosition.radius, 2)) {
+                this.rocksPosition.push( [randomXPos, randomZPos] ); 
                 break;
             }
         }
@@ -50,10 +50,10 @@ export class MyRockSet extends CGFobject {
         this.scene.pushMatrix();
         
         let scale = this.rocksScaling[i];
-        let randomX = this.rocksPosition[i][0];
-        let randomZ = this.rocksPosition[i][1];
+        let randomXPos = this.rocksPosition[i][0];
+        let randomZPos = this.rocksPosition[i][1];
         
-        this.scene.translate(randomX, 0.5 + 1 * scale, randomZ);    // 1 is the radius
+        this.scene.translate(randomXPos, 0.5 + 1 * scale, randomZPos);    // 1 is the radius
         this.scene.scale(5*scale, 5*scale, 5*scale);
 
         this.rocks[i].display();
