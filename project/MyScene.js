@@ -10,6 +10,7 @@ import { MyRock } from "./MyRock.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyPillar } from "./MyPillar.js";
 import { MyPlantSet } from "./MyPlantSet.js";
+import { MyMovingFish } from "./MyMovingFish.js";
 
 /**
 * MyScene
@@ -87,6 +88,9 @@ export class MyScene extends CGFscene {
         this.myRockSet = new MyRockSet(this, 16, 8, 50, this.nestPosition);   
         this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
         this.myWaterSurface = new MyPlane(this, 200);
+
+        this.myMovingFish = new MyMovingFish(this);
+
         this.myPillars = [ 
             new MyPillar(this, 100, {x: 5, y: 0, z: 0}),
             new MyPillar(this, 100, {x: 5, y: 0, z: 5}),
@@ -170,24 +174,47 @@ export class MyScene extends CGFscene {
         else console.error("this.myCubeMap is null");
     }
 
-    turn(val){
-        // console.log("Orientation: ", this.myMovingObject.orientation);
-        this.myMovingObject.orientation += val;
+    turn(val) {
+        // this.myMovingObject.orientation += val;
+        this.myMovingFish.orientation += val;
     }
 
-    accelerate(val){
-        // console.log("Speed: ", this.myMovingObject.speed);
-        this.myMovingObject.speed += val;
+    accelerate(val) {
+        //this.myMovingObject.speed += val;
         
-        if(this.myMovingObject.speed < 0){
+        /* if(this.myMovingObject.speed < 0){
             this.myMovingObject.speed = 0;
+        }*/
+
+        this.myMovingFish.speed += val;
+        if (this.myMovingFish.speed < 0) {
+            this.myMovingFish.speed = 0;
+        }
+    }
+
+    moveUp() {
+        console.log(this.myMovingFish.position);
+        if (this.myMovingFish.position[1] + this.myMovingFish.verticalSpeed <= 5) {
+            this.myMovingFish.position[1] += this.myMovingFish.verticalSpeed;
+        }
+    }
+
+    moveDown() {
+        console.log(this.myMovingFish.position);
+        if (this.myMovingFish.position[1] - this.myMovingFish.verticalSpeed > this.myMovingFish.fishScaleFactor + 0.7) {
+            this.myMovingFish.position[1] -= this.myMovingFish.verticalSpeed;
         }
     }
 
     reset(){
+        /*
         this.myMovingObject.speed = 0;
         this.myMovingObject.orientation = 0;
         this.myMovingObject.position = [0, 0, 0];
+        */
+        this.myMovingFish.speed = 0;
+        this.myMovingFish.orientation = 0;
+        this.myMovingFish.position = [0, 0, 0];
     }
 
     checkKeys(){
@@ -204,8 +231,11 @@ export class MyScene extends CGFscene {
         if(this.gui.isKeyPressed("KeyS")) {
             text += " S ";
             keysPressed = true;
-            if(this.myMovingObject.speed > 0)
+            /*if(this.myMovingObject.speed > 0)
+                this.accelerate(-0.1);*/
+            if (this.myMovingFish.speed > 0) {
                 this.accelerate(-0.1);
+            }
         }
 
         if(this.gui.isKeyPressed("KeyA")) {
@@ -223,11 +253,20 @@ export class MyScene extends CGFscene {
         if(this.gui.isKeyPressed("KeyR")) {
             this.reset();
         }
+
+        if (this.gui.isKeyPressed("KeyP")) {
+            this.moveUp();
+        }
+
+        if (this.gui.isKeyPressed("KeyL")) {
+            this.moveDown();
+        }
     }
 
     // Update speed factor attribute of Objects
     onSpeedFactorChange = () => {
-        this.myMovingObject.speedFactor = this.speedFactor;
+        // this.myMovingObject.speedFactor = this.speedFactor;
+        this.myMovingFish.speedFactor = this.speedFactor;
     }
 
     // called periodically (as per setUpdatePeriod() in init())
@@ -235,6 +274,7 @@ export class MyScene extends CGFscene {
         this.checkKeys();
         this.myMovingObject.update();
         this.myFish.update();
+        this.myMovingFish.updateMovingFish();
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 
@@ -283,35 +323,11 @@ export class MyScene extends CGFscene {
         if (this.displayAxis)
             this.axis.display();
 
-        // DRAW MOVING OBJECT
+        // DRAW BASIC (TRIANGLE) MOVING OBJECT 
         this.pushMatrix();
 
-        var rotateMovingObject = [
-            Math.cos(this.myMovingObject.orientation), 0, -Math.sin(this.myMovingObject.orientation), 0,
-            0, 1, 0, 0,
-            Math.sin(this.myMovingObject.orientation), 0, Math.cos(this.myMovingObject.orientation), 0,
-            0, 0, 0, 1
-        ];
-
-        var translateMovingObject = [
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            this.myMovingObject.position[0], this.myMovingObject.position[1], this.myMovingObject.position[2], 1
-        ];
-
-        var scaleMovingObject = [
-            this.scaleFactor, 0, 0, 0,
-            0, this.scaleFactor, 0, 0,
-            0, 0, this.scaleFactor, 0,
-            0, 0, 0, 1,
-        ];
-
-        this.multMatrix(translateMovingObject);
-        this.multMatrix(rotateMovingObject);
-        this.multMatrix(scaleMovingObject);
-
         // this.myMovingObject.display();
+
         this.popMatrix();
 
         // DRAW CYLINDER
@@ -365,7 +381,7 @@ export class MyScene extends CGFscene {
         this.multMatrix(scaleFish);
         this.multMatrix(translateFish)
         
-        this.myFish.display();
+        // this.myFish.display();
 
         this.popMatrix();
 
@@ -420,6 +436,13 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
 
         this.myPlantSet.display();
+
+        this.popMatrix();
+
+        // DRAW MOVING FISH
+        this.pushMatrix();
+
+        this.myMovingFish.display();
 
         this.popMatrix();
 

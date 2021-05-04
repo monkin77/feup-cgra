@@ -29,7 +29,6 @@ export class MyFish extends CGFobject {
         this.rightFin = new MyTriangleSmall(scene);
         this.leftFin = new MyTriangleSmall(scene);
         this.dorsalFin = new MyTriangleSmall(scene);
-        console.log("scene: ", this.scene);
 
         this.tailInclination = 0;
         this.maxTailInclination = 20 * Math.PI / 180;

@@ -72,7 +72,7 @@ export class MyPlantSet extends CGFobject {
         let randomXPos = this.plantsPosition[i][0];
         let randomZPos = this.plantsPosition[i][1];
         
-        this.scene.translate(randomXPos, 0.5 + 1 * scale, randomZPos);    // 1 is the radius
+        this.scene.translate(randomXPos, 0.2 + 1 * scale, randomZPos);    // 1 is the radius
         this.scene.scale(scale, 5*scale, scale);
 
         this.plants[i].display();
