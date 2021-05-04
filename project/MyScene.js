@@ -1,9 +1,15 @@
-import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
+import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture, CGFshader } from "../lib/CGF.js";
 import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
 import { MyCubeMap } from "./MyCubeMap.js";
 import { MyCylinder } from "./MyCylinder.js";
 import { MyFish } from "./MyFish.js";
+import {MyPlane} from "./MyPlane.js";
+import { MySeaFloor } from "./MySeaFloor.js";
+import { MyRock } from "./MyRock.js";
+import { MyRockSet } from "./MyRockSet.js";
+import { MyPillar } from "./MyPillar.js";
+import { MyPlantSet } from "./MyPlantSet.js";
 
 /**
 * MyScene
@@ -44,24 +50,31 @@ export class MyScene extends CGFscene {
         this.texture2_3 = new CGFtexture(this, 'images/my_img_1/nz.png');       // nz
         this.texture2_4 = new CGFtexture(this, 'images/my_img_1/px.png');      // px
         this.texture2_5 = new CGFtexture(this, 'images/my_img_1/py.png');        // py
-        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz
-
-        // Sea Textures
-        this.seaFloorTexture = new CGFtexture(this, 'images/sand.png');  // floor
-        this.seaFloorMapTexture = new CGFtexture(this, 'images/sandMap.png');   // floor map
+        this.texture2_6 = new CGFtexture(this ,'images/my_img_1/pz.png');      // pz       
         
+        this.texture3_1 = new CGFtexture(this, 'images/underwater_cubemap/left.jpg');       // nx
+        this.texture3_2 = new CGFtexture(this, 'images/underwater_cubemap/bottom.jpg');     // ny
+        this.texture3_3 = new CGFtexture(this, 'images/underwater_cubemap/back.jpg');       // nz
+        this.texture3_4 = new CGFtexture(this, 'images/underwater_cubemap/right.jpg');      // px
+        this.texture3_5 = new CGFtexture(this, 'images/underwater_cubemap/top.jpg');        // py
+        this.texture3_6 = new CGFtexture(this ,'images/underwater_cubemap/front.jpg');      // pz     
 
         this.sphereTexture = new CGFtexture(this, 'images/earth.jpg');
 
         this.arrTextures = [this.texture1, this.texture2, this.texture3, this.texture4, this.texture5, this.texture6];
         this.arrTextures2 = [this.texture2_1, this.texture2_2, this.texture2_3, this.texture2_4, this.texture2_5, this.texture2_6];
-        this.myCubeMapTextures = [this.arrTextures, this.arrTextures2];
+        this.arrTextures3 =  [this.texture3_1, this.texture3_2, this.texture3_3, this.texture3_4, this.texture3_5, this.texture3_6];
+        this.myCubeMapTextures = [this.arrTextures, this.arrTextures2, this.arrTextures3];
         this.myCubeMapTextureSelector = 0;  // variable that chooses the current texture
 
         this.myCubeMapTexturesList = {  // Object interface variables
             'Default': 0,
             'Custom 1': 1,
+            'Underwater': 2,
         } 
+
+        this.nestPosition = {x: 9, z: -18, radius: 5};  // position of the center of the Nest
+
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
@@ -70,6 +83,34 @@ export class MyScene extends CGFscene {
         this.myCubeMap = new MyCubeMap(this, this.myCubeMapTextures[this.myCubeMapTextureSelector]);
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
+        this.myRock = new MyRock(this, 16, 8);
+        this.myRockSet = new MyRockSet(this, 16, 8, 50, this.nestPosition);   
+        this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
+        this.myWaterSurface = new MyPlane(this, 200);
+        this.myPillars = [ 
+            new MyPillar(this, 100, {x: 5, y: 0, z: 0}),
+            new MyPillar(this, 100, {x: 5, y: 0, z: 5}),
+            new MyPillar(this, 100, {x: 13, y: 0, z: 0}),
+            new MyPillar(this, 100, {x: 13, y: 0, z: 5}),
+            new MyPillar(this, 100, {x: 21, y: 0, z: 0}),
+            new MyPillar(this, 100, {x: 21, y: 0, z: 5}),
+        ];
+        this.myPlantSet = new MyPlantSet(this, 4, 50, this.nestPosition)
+
+        this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
+        this.waterSurfaceShader.setUniformsValues( {uSampler2: 1, offset: 0} );		// The uSampler is already sent by default
+
+        this.waterSurfaceTexture = new CGFtexture(this, 'images/pier.jpg'); 
+        this.waterSurfaceDistortion = new CGFtexture(this, 'images/distortionmap.png');
+
+        this.waterSurfaceAppearance = new CGFappearance(this);
+		this.waterSurfaceAppearance.setAmbient(0.3, 0.3, 0.3, 1);
+		this.waterSurfaceAppearance.setDiffuse(0.7, 0.7, 0.7, 1);
+		this.waterSurfaceAppearance.setSpecular(0.0, 0.0, 0.0, 1);
+		this.waterSurfaceAppearance.setShininess(10);
+        this.waterSurfaceAppearance.setTexture(this.waterSurfaceTexture);
+		this.waterSurfaceAppearance.setTextureWrap('REPEAT', 'REPEAT');
+
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -92,6 +133,12 @@ export class MyScene extends CGFscene {
 		this.cylinderAppearance.setShininess(10);
         this.cylinderAppearance.setTexture(this.sphereTexture);
 
+        this.rockAppearance = new CGFappearance(this);
+        this.rockAppearance.setAmbient(0.4, 0.4, 0.4, 1);
+        this.rockAppearance.setDiffuse(0.4, 0.4, 0.4, 1);
+        this.rockAppearance.setSpecular(1, 1, 1, 1);
+        this.rockAppearance.setShininess(10);
+
 
         this.scaleFactor = 1;
         this.speedFactor = 1;
@@ -107,7 +154,7 @@ export class MyScene extends CGFscene {
     }
     
     initCameras() {
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFcamera(1.75, 0.1, 500, vec3.fromValues(2, 2, 2), vec3.fromValues(0, 2, 0));
     }
 
     setDefaultAppearance() {
@@ -140,6 +187,7 @@ export class MyScene extends CGFscene {
     reset(){
         this.myMovingObject.speed = 0;
         this.myMovingObject.orientation = 0;
+        this.myMovingObject.position = [0, 0, 0];
     }
 
     checkKeys(){
@@ -172,8 +220,9 @@ export class MyScene extends CGFscene {
             this.turn(0.1);
         }
 
-        if(keysPressed)
-            console.log(text);
+        if(this.gui.isKeyPressed("KeyR")) {
+            this.reset();
+        }
     }
 
     // Update speed factor attribute of Objects
@@ -186,6 +235,7 @@ export class MyScene extends CGFscene {
         this.checkKeys();
         this.myMovingObject.update();
         this.myFish.update();
+        this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 
     display() {
@@ -228,6 +278,7 @@ export class MyScene extends CGFscene {
         this.myCubeMap.display();
         this.popMatrix();
 
+
         // Draw axis
         if (this.displayAxis)
             this.axis.display();
@@ -260,7 +311,7 @@ export class MyScene extends CGFscene {
         this.multMatrix(rotateMovingObject);
         this.multMatrix(scaleMovingObject);
 
-        this.myMovingObject.display();
+        // this.myMovingObject.display();
         this.popMatrix();
 
         // DRAW CYLINDER
@@ -317,5 +368,62 @@ export class MyScene extends CGFscene {
         this.myFish.display();
 
         this.popMatrix();
+
+        // Draw Sea floor
+        this.pushMatrix();
+
+        this.mySeaFloor.display();
+
+        this.popMatrix();
+
+        // DRAW WATER SURFACE
+        this.pushMatrix();
+
+        this.setActiveShader(this.waterSurfaceShader);
+        
+        this.waterSurfaceTexture.bind();
+        this.waterSurfaceDistortion.bind(1);
+
+        this.waterSurfaceAppearance.apply();
+        
+        this.translate(0, 10, 0);
+        this.rotate(Math.PI/2, 1, 0, 0);
+        this.scale(50, 50, 50);
+
+        this.myWaterSurface.display();
+
+        this.popMatrix();
+        
+        this.setActiveShader(this.defaultShader);
+
+        // DRAW ROCK SET
+        this.pushMatrix();
+
+        this.rockAppearance.apply();
+        
+        this.myRockSet.display();
+        
+        this.popMatrix(); 
+
+        this.defaultAppearance.apply();
+
+        // DRAW PILLARS
+
+        for(let i = 0; i < this.myPillars.length; i++){
+            this.myPillars[i].display();
+        }
+        
+        this.defaultAppearance.apply();
+
+        // DRAW PLANTS
+
+        this.pushMatrix();
+
+        this.myPlantSet.display();
+
+        this.popMatrix();
+
     }
+
+
 }

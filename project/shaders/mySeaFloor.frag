@@ -12,7 +12,10 @@ void main() {
 	vec4 color = texture2D(uSampler, vTextureCoord);
 	vec4 filter1 = texture2D(uSampler2, vTextureCoord2);
 
-	color = color - 0.5*vec4(1.0 - filter1.r, 1.0 - filter1.g, 1.0 - filter1.b, 0);	
-        
+	/* Since the colorHeightMap values don't go higher than 0.6, we can use it as the upper bound in order augment the contrast	*/
+	if(filter1.r <= 0.6){
+		color = color - 1.0*vec4(0.6 - filter1.r, 0.6 - filter1.r, 0.6 - filter1.r, 0);	
+	}
+
 	gl_FragColor = color;
 }
