@@ -54,7 +54,7 @@ export class MyRockSet extends CGFobject {
         let randomZPos = this.rocksPosition[i][1];
         
         this.scene.translate(randomXPos, 0.5 + 1 * scale, randomZPos);    // 1 is the radius
-        this.scene.scale(5*scale, 5*scale, 5*scale);
+        this.scene.scale(scale, scale, scale);
 
         this.rocks[i].display();
         this.scene.popMatrix();

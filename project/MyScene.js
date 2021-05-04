@@ -84,16 +84,18 @@ export class MyScene extends CGFscene {
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
         this.myRock = new MyRock(this, 16, 8);
-        this.myRockSet = new MyRockSet(this, 16, 8, 10, this.nestPosition);   
+        this.myRockSet = new MyRockSet(this, 16, 8, 50, this.nestPosition);   
         this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
         this.myWaterSurface = new MyPlane(this, 200);
         this.myPillars = [ 
-            new MyPillar(this, 100, {x: 10, y: 0, z: 10}),
-            new MyPillar(this, 100, {x: -10, y: 0, z: -10}),
-            new MyPillar(this, 100, {x: 10, y: 0, z: -5}),
-            new MyPillar(this, 100, {x: -5, y: 0, z: 5}),
+            new MyPillar(this, 100, {x: 5, y: 0, z: 0}),
+            new MyPillar(this, 100, {x: 5, y: 0, z: 5}),
+            new MyPillar(this, 100, {x: 13, y: 0, z: 0}),
+            new MyPillar(this, 100, {x: 13, y: 0, z: 5}),
+            new MyPillar(this, 100, {x: 21, y: 0, z: 0}),
+            new MyPillar(this, 100, {x: 21, y: 0, z: 5}),
         ];
-        this.myPlantSet = new MyPlantSet(this, 4, 10, this.nestPosition)
+        this.myPlantSet = new MyPlantSet(this, 4, 50, this.nestPosition)
 
         this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
         this.waterSurfaceShader.setUniformsValues( {uSampler2: 1, offset: 0} );		// The uSampler is already sent by default
