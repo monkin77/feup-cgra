@@ -18,37 +18,6 @@ export class MyMovingObject extends CGFobject {
         this.orientation = 0.0;
     }
 
-    /*  initBuffers(){
-        this.vertices = [
-            0.5, 0, -0.5,       // 0
-            -0.5, 0, -0.5,      // 1
-            0, 0, 0.5           // 2
-        ]
-        
-        this.vertices = this.vertices.concat(this.vertices);
-
-        //Counter-clockwise reference of vertices
-		this.indices = [
-			0, 1, 2,            // only painted in one side
-            5, 4, 3
-		];
-
-        this.normals = [
-            0, 1, 0,
-            0, 1, 0,
-            0, 1, 0,
-            0, -1, 0,
-            0, -1, 0,
-            0, -1, 0,
-        ]
-
-        //The defined indices (and corresponding vertices)
-		//will be read in groups of three to draw triangles
-        this.primitiveType = this.scene.gl.TRIANGLES;
-
-        this.initGLBuffers();
-    }*/
-
     update(){        
         let directionVector = [0.0, 0.0, 0.0];
 
@@ -58,6 +27,7 @@ export class MyMovingObject extends CGFobject {
         this.position[0] = this.position[0] + directionVector[0];
         this.position[1] = this.position[1] + directionVector[1];
         this.position[2] = this.position[2] + directionVector[2];
+
     }
 
     display() {

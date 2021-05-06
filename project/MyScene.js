@@ -176,6 +176,7 @@ export class MyScene extends CGFscene {
 
     turn(val) {
         // this.myMovingObject.orientation += val;
+        this.myMovingFish.oldOrientation = this.myMovingFish.orientation;
         this.myMovingFish.orientation += val;
     }
 
@@ -190,17 +191,18 @@ export class MyScene extends CGFscene {
         if (this.myMovingFish.speed < 0) {
             this.myMovingFish.speed = 0;
         }
+        if (this.myMovingFish.speed > 5.0) {
+            this.myMovingFish.speed = 5.0;
+        }
     }
 
     moveUp() {
-        console.log(this.myMovingFish.position);
         if (this.myMovingFish.position[1] + this.myMovingFish.verticalSpeed <= 5) {
             this.myMovingFish.position[1] += this.myMovingFish.verticalSpeed;
         }
     }
 
     moveDown() {
-        console.log(this.myMovingFish.position);
         if (this.myMovingFish.position[1] - this.myMovingFish.verticalSpeed > this.myMovingFish.fishScaleFactor + 0.7) {
             this.myMovingFish.position[1] -= this.myMovingFish.verticalSpeed;
         }
@@ -214,7 +216,10 @@ export class MyScene extends CGFscene {
         */
         this.myMovingFish.speed = 0;
         this.myMovingFish.orientation = 0;
-        this.myMovingFish.position = [0, 0, 0];
+        this.myMovingFish.position = [0.0, 5.0, 0.0];
+        this.myMovingFish.fish.tailIncrement = this.myMovingFish.fish.defaultTailIncrement; 
+        this.myMovingFish.fish.tailInclination = 0;
+        this.myMovingFish.fish.finsInclination = 0;
     }
 
     checkKeys(){
@@ -225,6 +230,7 @@ export class MyScene extends CGFscene {
         if(this.gui.isKeyPressed("KeyW")){
             text += " W ";
             keysPressed = true;
+            console.log(this.myMovingFish.speed);
             this.accelerate(0.1);
         }
 
@@ -242,8 +248,8 @@ export class MyScene extends CGFscene {
             text += " A ";
             keysPressed = true;
             this.turn(-0.1);
-        }
-
+        } 
+        
         if(this.gui.isKeyPressed("KeyD")) {
             text += " D ";
             keysPressed = true;
@@ -273,7 +279,7 @@ export class MyScene extends CGFscene {
     update(t){
         this.checkKeys();
         this.myMovingObject.update();
-        this.myFish.update();
+        // this.myFish.update();
         this.myMovingFish.updateMovingFish();
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }

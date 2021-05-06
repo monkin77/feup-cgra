@@ -69,7 +69,7 @@ export class MyRock extends CGFobject {
           // (i.e. one full round of slices ahead)
           
           this.indices.push( current + 1, current, next);
-          this.indices.push( current + 1, next, next +1);
+          this.indices.push( current + 1, next, next + 1);
         }
         
 
