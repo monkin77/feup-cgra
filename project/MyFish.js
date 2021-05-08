@@ -70,10 +70,6 @@ export class MyFish extends CGFobject {
         this.eyeShader = new CGFshader(this.scene.gl, "shaders/fishEyeShader.vert", "shaders/fishEyeShader.frag");
     }
 
-    increaseTailFrequency = () => {
-
-    }
-
     update = (speed = 0) => {
 
         let prevIncrement = this.tailIncrement;

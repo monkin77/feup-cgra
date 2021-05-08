@@ -90,6 +90,8 @@ export class MyScene extends CGFscene {
         this.myWaterSurface = new MyPlane(this, 200);
 
         this.myMovingFish = new MyMovingFish(this);
+        this.lowerBound = 0.5;       // global lowerBound for fish
+        this.upperBound = 5;           // global upperBound
 
         this.myPillars = [ 
             new MyPillar(this, 100, {x: 5, y: 0, z: 0}),
@@ -99,6 +101,7 @@ export class MyScene extends CGFscene {
             new MyPillar(this, 100, {x: 21, y: 0, z: 0}),
             new MyPillar(this, 100, {x: 21, y: 0, z: 5}),
         ];
+
         this.myPlantSet = new MyPlantSet(this, 4, 50, this.nestPosition)
 
         this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
@@ -114,7 +117,6 @@ export class MyScene extends CGFscene {
 		this.waterSurfaceAppearance.setShininess(10);
         this.waterSurfaceAppearance.setTexture(this.waterSurfaceTexture);
 		this.waterSurfaceAppearance.setTextureWrap('REPEAT', 'REPEAT');
-
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -199,14 +201,18 @@ export class MyScene extends CGFscene {
     }
 
     moveUp() {
-        if (this.myMovingFish.position[1] + this.myMovingFish.verticalSpeed <= 5) {
+
+        if (this.myMovingFish.position[1] + this.myMovingFish.verticalSpeed <= this.upperBound) {
             this.myMovingFish.position[1] += this.myMovingFish.verticalSpeed;
         }
     }
 
     moveDown() {
-        if (this.myMovingFish.position[1] - this.myMovingFish.verticalSpeed > this.myMovingFish.fishScaleFactor + 0.7) {
+
+        if (this.myMovingFish.position[1] - this.myMovingFish.verticalSpeed > this.lowerBound + this.myMovingFish.fishScaleFactor) {
             this.myMovingFish.position[1] -= this.myMovingFish.verticalSpeed;
+        } else {
+            this.myMovingFish.position[1] = this.lowerBound + this.myMovingFish.fishScaleFactor;
         }
     }
 
@@ -216,12 +222,8 @@ export class MyScene extends CGFscene {
         this.myMovingObject.orientation = 0;
         this.myMovingObject.position = [0, 0, 0];
         */
-        this.myMovingFish.speed = 0;
-        this.myMovingFish.orientation = 0;
-        this.myMovingFish.position = [0.0, 5.0, 0.0];
-        this.myMovingFish.fish.tailIncrement = this.myMovingFish.fish.defaultTailIncrement; 
-        this.myMovingFish.fish.tailInclination = 0;
-        this.myMovingFish.fish.finsInclination = 0;
+        this.myMovingFish.reset(this.myRockSet);
+        
     }
 
     checkKeys(){
@@ -272,6 +274,11 @@ export class MyScene extends CGFscene {
         if (this.gui.isKeyPressed("KeyL")) {
             this.moveDown();
         }
+
+        if (this.gui.isKeyPressed("KeyC")) {
+            // apanhar pedra
+            this.myMovingFish.handleRock(this.myRockSet, this.lowerBound, this.upperBound, this.nestPosition);
+        }
     }
 
     // Update speed factor attribute of Objects
@@ -285,7 +292,7 @@ export class MyScene extends CGFscene {
         this.checkKeys();
         this.myMovingObject.update();
         // this.myFish.update();
-        this.myMovingFish.updateMovingFish();
+        this.myMovingFish.updateMovingFish(this.myRockSet);
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 
