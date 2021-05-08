@@ -202,8 +202,10 @@ export class MyScene extends CGFscene {
 
     moveUp() {
 
-        if (this.myMovingFish.position[1] + this.myMovingFish.verticalSpeed <= this.upperBound) {
+        if (this.myMovingFish.position[1] + this.myMovingFish.verticalSpeed < this.upperBound - this.myMovingFish.fishScaleFactor) {
             this.myMovingFish.position[1] += this.myMovingFish.verticalSpeed;
+        } else {
+            this.myMovingFish.position[1] = this.upperBound - this.myMovingFish.fishScaleFactor;
         }
     }
 

@@ -15,19 +15,25 @@ export class MyMovingFish extends MyMovingObject {
 
         this.turningRight = false;
         this.turningLeft = false;
-        this.trowingRock = false;
+        this.throwingRock = false;
         
         this.maxRockDistance = 1.5;
+    
+        this.rockParabolicSpeed = [0.0, 0.0, 0.0];  // Parabolic Movement of stones
+        this.gravity = 9.81;    // Absolute value of y acceleration
+        this.currentThrowingTime = 0;
+        this.totalThrowingTime = 0;
 
         this.grabbedRockIndex;
         this.initialRockPosition;
 
-        this.position = [0.0, 5.0, 0.0];
+        this.position = [0.0, 5.0 - this.fishScaleFactor, 0.0];
     }
 
-    calculateRockPosition() {
-        let result;
+    calculateRockPosition(lowerBound) {
+        let result = this.position;
         if (!this.throwingRock) {
+            console.log("NotThrowing");
             let directionVector = [0.0, 0.0, 0.0];
 
             directionVector[0] = Math.sin(this.orientation); //* this.speed * this.speedFactor;
@@ -38,9 +44,22 @@ export class MyMovingFish extends MyMovingObject {
                         this.position[2] + directionVector[2]];
         }
         else {
+            console.log("Speed: ", this.rockParabolicSpeed);
 
+            result = [ this.position[0] + this.rockParabolicSpeed[0], 
+                        this.position[1] + this.rockParabolicSpeed[1], 
+                        this.position[2] + this.rockParabolicSpeed[2]];
+
+            this.rockParabolicSpeed[1] -= this.gravity;
+
+            if (this.currentThrowingTime >= this.totalThrowingTime) {
+                result[1] = lowerBound + 0.2;
+                this.throwingRock = false;
+                this.initialRockPosition = null;
+                this.grabbedRockIndex = null;
+            }
+            this.currentThrowingTime += 1;
         }
-
         return result;
     }
 
@@ -54,11 +73,13 @@ export class MyMovingFish extends MyMovingObject {
     }
 
     handleRock(rockSet, lowerBound, upperBound, nestPosition) {
-        if (this.grabbedRockIndex ) {
-            this.dropRock(rockSet, lowerBound, upperBound, nestPosition);
-        }
-        else {
-            this.grabRock(rockSet, lowerBound);
+        if (!this.throwingRock) {
+            if (this.grabbedRockIndex ) {
+                this.dropRock(rockSet, lowerBound, upperBound, nestPosition);
+            }
+            else {
+                this.grabRock(rockSet, lowerBound);
+            }
         }
     }
 
@@ -68,21 +89,26 @@ export class MyMovingFish extends MyMovingObject {
 
         if (this.position[1] - this.fishScaleFactor == lowerBound ) {
             if ( distance <= nestPosition.radius - 1 ) {
-                rockSet.rocksPosition[this.grabbedRockIndex][1] = this.lowerBound + 0.2;
+                rockSet.rocksPosition[this.grabbedRockIndex][1] = lowerBound + 0.2;
 
                 this.grabbedRockIndex = null;
                 this.initialRockPosition = null;
             }
-        } 
-        else if (this.position[1] == upperBound && distance >= nestPosition.radius - 1 ) {
-            let v0x = 5;
+        }
+        else if (this.position[1] + this.fishScaleFactor == upperBound && distance >= nestPosition.radius - 1 ) {
+            let v0x = 1;    // THIS IS WRONG; we should see if it is positive
             
             // Calculating v0y and v0z through v0x and its movement equation
-            t = Math.abs(( nestPosition.x - rockSet.rockPosition[this.grabbedRockIndex][0] ) )/ v0x;  
-            let v0y = 0.5 * 9.81 * t;
-            let v0z = Math.abs(nestPosition.z - rockSet.rockPosition[this.grabbedRockIndex][2]) / t;
-        }
+            let t = Math.abs(( nestPosition.x - rockSet.rocksPosition[this.grabbedRockIndex][0] ) ) / (v0x * 50); 
+            let v0y = 0.5 * this.gravity * t;
+            let v0z = (nestPosition.z - rockSet.rocksPosition[this.grabbedRockIndex][2]) / t;
 
+            this.rockParabolicSpeed = [v0x, v0y, v0z];
+            this.throwingRock = true;
+
+            this.totalThrowingTime = t * 50;    // 50 is the frequency of update
+            this.currentThrowingTime = 0;
+        }
     }
 
     grabRock(rockSet, lowerBound) {
@@ -108,7 +134,6 @@ export class MyMovingFish extends MyMovingObject {
             }
 
             rockSet.rocksPosition[closestRockIndex] = this.calculateRockPosition();     // Rock new Position on Fish Mouth
-            
         }
     }
 
