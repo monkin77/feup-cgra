@@ -27,6 +27,7 @@ export class MyFish extends CGFobject {
 
         this.tailInclination = 0;
         this.maxTailInclination = 20 * Math.PI / 180;
+        
         this.defaultTailIncrement = (this.maxTailInclination / 20) * 4;    // 20 -> refresh rate | 4 -> number of moves per second
         this.tailIncrement = this.defaultTailIncrement;
 
@@ -69,13 +70,22 @@ export class MyFish extends CGFobject {
         this.eyeShader = new CGFshader(this.scene.gl, "shaders/fishEyeShader.vert", "shaders/fishEyeShader.frag");
     }
 
+    increaseTailFrequency = () => {
+
+    }
+
     update = (speed = 0) => {
 
-        this.tailIncrement += 2 * speed * Math.PI / 180;
+        let prevIncrement = this.tailIncrement;
+
+        this.tailIncrement = 2 * speed * Math.PI / 180 + this.defaultTailIncrement;
+        
+        if (prevIncrement < 0) this.tailIncrement *= -1;
 
         if(Math.abs(this.tailInclination + this.tailIncrement) > this.maxTailInclination){
             this.tailIncrement *= -1;
         }
+
         if(Math.abs(this.finsInclination + this.finsIncrement) > this.maxFinsInclination){
             this.finsIncrement *= -1;
         }

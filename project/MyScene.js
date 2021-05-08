@@ -230,8 +230,8 @@ export class MyScene extends CGFscene {
         if(this.gui.isKeyPressed("KeyW")){
             text += " W ";
             keysPressed = true;
-            console.log(this.myMovingFish.speed);
             this.accelerate(0.1);
+            
         }
 
         if(this.gui.isKeyPressed("KeyS")) {

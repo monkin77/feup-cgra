@@ -21,7 +21,7 @@ export class MyMovingFish extends MyMovingObject {
         this.update();
     }
 
-    display(turningRight, turningLeft) {
+    display() {
         this.scene.pushMatrix();
         
         this.scene.defaultAppearance.apply();
@@ -31,7 +31,7 @@ export class MyMovingFish extends MyMovingObject {
         this.scene.scale(this.scene.scaleFactor, this.scene.scaleFactor, this.scene.scaleFactor);
         this.scene.scale(this.fishScaleFactor, this.fishScaleFactor, this.fishScaleFactor);
 
-        this.fish.display(turningRight, turningLeft);
+        this.fish.display();
 
         this.scene.popMatrix();
     }
