@@ -176,8 +176,10 @@ export class MyScene extends CGFscene {
 
     turn(val) {
         // this.myMovingObject.orientation += val;
-        this.myMovingFish.oldOrientation = this.myMovingFish.orientation;
         this.myMovingFish.orientation += val;
+
+        if (val < 0) this.myMovingFish.turningLeft = true;
+        else this.myMovingFish.turningRight = true;
     }
 
     accelerate(val) {
@@ -249,11 +251,14 @@ export class MyScene extends CGFscene {
             keysPressed = true;
             this.turn(-0.1);
         } 
-        
-        if(this.gui.isKeyPressed("KeyD")) {
+        else if(this.gui.isKeyPressed("KeyD")) {
             text += " D ";
             keysPressed = true;
             this.turn(0.1);
+        }
+        else {
+            this.myMovingFish.turningLeft = false;
+            this.myMovingFish.turningRight = false;
         }
 
         if(this.gui.isKeyPressed("KeyR")) {

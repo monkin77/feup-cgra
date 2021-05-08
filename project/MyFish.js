@@ -94,7 +94,7 @@ export class MyFish extends CGFobject {
         this.finsInclination += this.finsIncrement;
     }
 
-    display(){
+    display(turningRight, turningLeft) {
         // Draw Body
         this.scene.pushMatrix();  //push Identity Matrix
 
@@ -306,7 +306,9 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(translateRightFin);
         this.scene.multMatrix(scaleFin);
         this.scene.multMatrix(invertTranlationToOrigin);
-        this.scene.multMatrix(rotateFinAnimation);
+        
+        if (!turningRight) this.scene.multMatrix(rotateFinAnimation);
+        
         this.scene.multMatrix(translateFinToOrigin);
         this.scene.multMatrix(rotateFinAroundX);
         this.scene.multMatrix(rotateFinAroundZ);
@@ -339,7 +341,9 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(translateRightFin);
         this.scene.multMatrix(scaleFin);
         this.scene.multMatrix(invertTranlationToOrigin);
-        this.scene.multMatrix(rotateFinAnimation);
+        
+        if (!turningLeft) this.scene.multMatrix(rotateFinAnimation);
+        
         this.scene.multMatrix(translateFinToOrigin);
         this.scene.multMatrix(rotateFinAroundX);
         this.scene.multMatrix(rotateFinAroundZ);
