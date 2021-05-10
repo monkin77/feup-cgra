@@ -294,7 +294,7 @@ export class MyScene extends CGFscene {
         this.checkKeys();
         this.myMovingObject.update();
         // this.myFish.update();
-        this.myMovingFish.updateMovingFish(this.myRockSet);
+        this.myMovingFish.updateMovingFish(this.myRockSet, this.lowerBound);
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 

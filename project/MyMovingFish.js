@@ -20,7 +20,8 @@ export class MyMovingFish extends MyMovingObject {
         this.maxRockDistance = 1.5;
     
         this.rockParabolicSpeed = [0.0, 0.0, 0.0];  // Parabolic Movement of stones
-        this.gravity = 9.81;    // Absolute value of y acceleration
+        this.initialThrowingPosition = [0.0, 0.0, 0.0];
+        this.gravity = 0.0981 / 50;    // Absolute value of y acceleration, in distance / frame
         this.currentThrowingTime = 0;
         this.totalThrowingTime = 0;
 
@@ -33,7 +34,7 @@ export class MyMovingFish extends MyMovingObject {
     calculateRockPosition(lowerBound) {
         let result = this.position;
         if (!this.throwingRock) {
-            console.log("NotThrowing");
+
             let directionVector = [0.0, 0.0, 0.0];
 
             directionVector[0] = Math.sin(this.orientation); //* this.speed * this.speedFactor;
@@ -45,15 +46,22 @@ export class MyMovingFish extends MyMovingObject {
         }
         else {
             console.log("Speed: ", this.rockParabolicSpeed);
+            
+            let x = this.initialThrowingPosition[0] + this.rockParabolicSpeed[0] * this.currentThrowingTime;
+            let y = this.initialThrowingPosition[1] + this.rockParabolicSpeed[1] * this.currentThrowingTime + 1/2 * this.gravity * Math.pow(this.currentThrowingTime, 2);
+            let z = this.initialThrowingPosition[2] + this.rockParabolicSpeed[2] * this.currentThrowingTime;
 
-            result = [ this.position[0] + this.rockParabolicSpeed[0], 
-                        this.position[1] + this.rockParabolicSpeed[1], 
-                        this.position[2] + this.rockParabolicSpeed[2]];
+            result = [x, y, z];
+            console.log("Almost last: ", result);
 
-            this.rockParabolicSpeed[1] -= this.gravity;
+            this.rockParabolicSpeed[1] -= this.gravity;     // Atualizar a velocidade em y
 
-            if (this.currentThrowingTime >= this.totalThrowingTime) {
+            if (y <= lowerBound + 0.2) {
+            // if (this.currentThrowingTime >= this.totalThrowingTime) {
+
                 result[1] = lowerBound + 0.2;
+                console.log("Last Position: ", lowerBound);
+
                 this.throwingRock = false;
                 this.initialRockPosition = null;
                 this.grabbedRockIndex = null;
@@ -63,12 +71,13 @@ export class MyMovingFish extends MyMovingObject {
         return result;
     }
 
-    updateMovingFish(rockSet) {
+    updateMovingFish(rockSet, lowerBound) {
         this.fish.update(this.speed);
         this.update();
 
         if (this.grabbedRockIndex) {
-            rockSet.rocksPosition[this.grabbedRockIndex] = this.calculateRockPosition();
+            rockSet.rocksPosition[this.grabbedRockIndex] = this.calculateRockPosition(lowerBound);
+            console.log("Position: ", rockSet.rocksPosition[this.grabbedRockIndex]);
         }
     }
 
@@ -96,17 +105,22 @@ export class MyMovingFish extends MyMovingObject {
             }
         }
         else if (this.position[1] + this.fishScaleFactor == upperBound && distance >= nestPosition.radius - 1 ) {
-            let v0x = 1;    // THIS IS WRONG; we should see if it is positive
-            
+            let t = 50 * 5;  // FPS / seconds
+            let v0x = ( nestPosition.x - rockSet.rocksPosition[this.grabbedRockIndex][0] ) / t;
+            // let v0x = 1;
             // Calculating v0y and v0z through v0x and its movement equation
-            let t = Math.abs(( nestPosition.x - rockSet.rocksPosition[this.grabbedRockIndex][0] ) ) / (v0x * 50); 
-            let v0y = 0.5 * this.gravity * t;
+            // let t = Math.abs(( nestPosition.x - rockSet.rocksPosition[this.grabbedRockIndex][0] ) ) / (v0x * 50); 
+            
+            // y(t) = y0 + v0y*t + 1/2 * ay* t^2
+            // v0y = (y(t) - yo - 1/2 * ay * t ^2) / t
+            let v0y = ( (lowerBound + 0.2) - this.initialThrowingPosition[1] + 1/2 * this.gravity * Math.pow(t, 2) ) / t;
             let v0z = (nestPosition.z - rockSet.rocksPosition[this.grabbedRockIndex][2]) / t;
 
             this.rockParabolicSpeed = [v0x, v0y, v0z];
+            this.initialThrowingPosition = rockSet.rocksPosition[this.grabbedRockIndex];
             this.throwingRock = true;
 
-            this.totalThrowingTime = t * 50;    // 50 is the frequency of update
+            this.totalThrowingTime = t;    // 50 is the frequency of update
             this.currentThrowingTime = 0;
         }
     }
