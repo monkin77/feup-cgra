@@ -105,8 +105,16 @@ export class MyMovingFish extends MyMovingObject {
             }
         }
         else if (this.position[1] + this.fishScaleFactor == upperBound && distance >= nestPosition.radius - 1 ) {
+            this.initialThrowingPosition = rockSet.rocksPosition[this.grabbedRockIndex];
+
             let t = 50 * 5;  // FPS / seconds
-            let v0x = ( nestPosition.x - rockSet.rocksPosition[this.grabbedRockIndex][0] ) / t;
+
+            let randomAngleDeviation = Math.random() * 360;     // random number between 0 and 360 
+            let positionInNest = [nestPosition.x + Math.cos(randomAngleDeviation) * 2,
+                                    nestPosition.y,
+                                    nestPosition.z + Math.sin(randomAngleDeviation) * 2];
+
+            let v0x = ( positionInNest[0] - rockSet.rocksPosition[this.grabbedRockIndex][0] ) / t;
             // let v0x = 1;
             // Calculating v0y and v0z through v0x and its movement equation
             // let t = Math.abs(( nestPosition.x - rockSet.rocksPosition[this.grabbedRockIndex][0] ) ) / (v0x * 50); 
@@ -114,10 +122,9 @@ export class MyMovingFish extends MyMovingObject {
             // y(t) = y0 + v0y*t + 1/2 * ay* t^2
             // v0y = (y(t) - yo - 1/2 * ay * t ^2) / t
             let v0y = ( (lowerBound + 0.2) - this.initialThrowingPosition[1] + 1/2 * this.gravity * Math.pow(t, 2) ) / t;
-            let v0z = (nestPosition.z - rockSet.rocksPosition[this.grabbedRockIndex][2]) / t;
+            let v0z = ( positionInNest[2] - rockSet.rocksPosition[this.grabbedRockIndex][2]) / t;
 
             this.rockParabolicSpeed = [v0x, v0y, v0z];
-            this.initialThrowingPosition = rockSet.rocksPosition[this.grabbedRockIndex];
             this.throwingRock = true;
 
             this.totalThrowingTime = t;    // 50 is the frequency of update
