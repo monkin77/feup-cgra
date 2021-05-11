@@ -25,13 +25,18 @@ export class MyMovingFish extends MyMovingObject {
         this.currentThrowingTime = 0;
         this.totalThrowingTime = 0;
 
+        this.currentNestAngle = 0;
+        this.nestAngleIncrement = 180 * Math.PI / 180;
+        this.nestYOffset = 0;
+        this.nestYOffsetIncrement = 0.25;   
+
         this.grabbedRockIndex;
         this.initialRockPosition;
 
         this.position = [0.0, 5.0 - this.fishScaleFactor, 0.0];
     }
 
-    calculateRockPosition(lowerBound) {
+    calculateRockPosition(nestPosition) {
         let result = this.position;
         if (!this.throwingRock) {
 
@@ -53,10 +58,10 @@ export class MyMovingFish extends MyMovingObject {
 
             this.rockParabolicSpeed[1] -= this.gravity;     // Atualizar a velocidade em y
 
-            if (y <= lowerBound + 0.2) {
+            if (y <= nestPosition.y + this.nestYOffset) {
             // if (this.currentThrowingTime >= this.totalThrowingTime) {
 
-                result[1] = lowerBound + 0.2;
+                result[1] = nestPosition.y + this.nestYOffset;
 
                 this.throwingRock = false;
                 this.initialRockPosition = null;
@@ -67,12 +72,12 @@ export class MyMovingFish extends MyMovingObject {
         return result;
     }
 
-    updateMovingFish(rockSet, lowerBound) {
+    updateMovingFish(rockSet, nestPosition) {
         this.fish.update(this.speed);
         this.update();
 
         if (this.grabbedRockIndex) {
-            rockSet.rocksPosition[this.grabbedRockIndex] = this.calculateRockPosition(lowerBound);
+            rockSet.rocksPosition[this.grabbedRockIndex] = this.calculateRockPosition(nestPosition);
         }
     }
 
@@ -104,10 +109,18 @@ export class MyMovingFish extends MyMovingObject {
 
             let t = 20 * 3;  // FPS * seconds
 
-            let randomAngleDeviation = Math.random() * 360;     // random number between 0 and 360 
-            let positionInNest = [nestPosition.x + Math.cos(randomAngleDeviation) * 2,
-                                    nestPosition.y,
-                                    nestPosition.z + Math.sin(randomAngleDeviation) * 2];
+            // let randomAngleDeviation = Math.random() * 360;     // random number between 0 and 360 
+            let positionInNest = [nestPosition.x + Math.cos(this.currentNestAngle) * 2,
+                                    nestPosition.y + this.nestYOffset,
+                                    nestPosition.z + Math.sin(this.currentNestAngle) * 2];
+
+            this.currentNestAngle += this.nestAngleIncrement;
+
+            if(this.currentNestAngle >= 2*Math.PI){
+                this.currentNestAngle -= 2*Math.PI;
+                this.nestYOffset += this.nestYOffsetIncrement;
+            }
+
 
             let v0x = ( positionInNest[0] - rockSet.rocksPosition[this.grabbedRockIndex][0] ) / t;
             // let v0x = 1;

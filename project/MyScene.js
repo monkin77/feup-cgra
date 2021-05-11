@@ -74,6 +74,9 @@ export class MyScene extends CGFscene {
             'Underwater': 2,
         } 
 
+        this.lowerBound = 0.5;       // global lowerBound for fish
+        this.upperBound = 5;           // global upperBound
+
         this.nestPosition = {x: 9, y: this.lowerBound+0.2, z: -18, radius: 5};  // position of the center of the Nest
 
 
@@ -85,13 +88,11 @@ export class MyScene extends CGFscene {
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
         this.myRock = new MyRock(this, 16, 8);
-        this.myRockSet = new MyRockSet(this, 16, 8, 50, this.nestPosition);   
+        this.myRockSet = new MyRockSet(this, 32, 16, 100, this.nestPosition);   
         this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
         this.myWaterSurface = new MyPlane(this, 200);
 
         this.myMovingFish = new MyMovingFish(this);
-        this.lowerBound = 0.5;       // global lowerBound for fish
-        this.upperBound = 5;           // global upperBound
 
         this.myPillars = [ 
             new MyPillar(this, 100, {x: 5, y: 0, z: 0}),
@@ -294,7 +295,7 @@ export class MyScene extends CGFscene {
         this.checkKeys();
         this.myMovingObject.update();
         // this.myFish.update();
-        this.myMovingFish.updateMovingFish(this.myRockSet, this.lowerBound);
+        this.myMovingFish.updateMovingFish(this.myRockSet, this.nestPosition);
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 
