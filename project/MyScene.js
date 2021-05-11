@@ -33,7 +33,7 @@ export class MyScene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
-        this.setUpdatePeriod(50);
+        this.setUpdatePeriod(50);   // 20 fps
         
         this.enableTextures(true);
 
@@ -74,7 +74,7 @@ export class MyScene extends CGFscene {
             'Underwater': 2,
         } 
 
-        this.nestPosition = {x: 9, z: -18, radius: 5};  // position of the center of the Nest
+        this.nestPosition = {x: 9, y: this.lowerBound+0.2, z: -18, radius: 5};  // position of the center of the Nest
 
 
         //Initialize scene objects
