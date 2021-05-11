@@ -10,6 +10,7 @@ import { MyRock } from "./MyRock.js";
 import { MyRockSet } from "./MyRockSet.js";
 import { MyPillar } from "./MyPillar.js";
 import { MyPlantSet } from "./MyPlantSet.js";
+import { MyMovingFish } from "./MyMovingFish.js";
 
 /**
 * MyScene
@@ -32,7 +33,7 @@ export class MyScene extends CGFscene {
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
 
-        this.setUpdatePeriod(50);
+        this.setUpdatePeriod(50);   // 20 fps
         
         this.enableTextures(true);
 
@@ -73,7 +74,7 @@ export class MyScene extends CGFscene {
             'Underwater': 2,
         } 
 
-        this.nestPosition = {x: 9, z: -18, radius: 5};  // position of the center of the Nest
+        this.nestPosition = {x: 9, y: this.lowerBound+0.2, z: -18, radius: 5};  // position of the center of the Nest
 
 
         //Initialize scene objects
@@ -87,6 +88,11 @@ export class MyScene extends CGFscene {
         this.myRockSet = new MyRockSet(this, 16, 8, 50, this.nestPosition);   
         this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
         this.myWaterSurface = new MyPlane(this, 200);
+
+        this.myMovingFish = new MyMovingFish(this);
+        this.lowerBound = 0.5;       // global lowerBound for fish
+        this.upperBound = 5;           // global upperBound
+
         this.myPillars = [ 
             new MyPillar(this, 100, {x: 5, y: 0, z: 0}),
             new MyPillar(this, 100, {x: 5, y: 0, z: 5}),
@@ -95,6 +101,7 @@ export class MyScene extends CGFscene {
             new MyPillar(this, 100, {x: 21, y: 0, z: 0}),
             new MyPillar(this, 100, {x: 21, y: 0, z: 5}),
         ];
+
         this.myPlantSet = new MyPlantSet(this, 4, 50, this.nestPosition)
 
         this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
@@ -110,7 +117,6 @@ export class MyScene extends CGFscene {
 		this.waterSurfaceAppearance.setShininess(10);
         this.waterSurfaceAppearance.setTexture(this.waterSurfaceTexture);
 		this.waterSurfaceAppearance.setTextureWrap('REPEAT', 'REPEAT');
-
 
         this.defaultAppearance = new CGFappearance(this);
 		this.defaultAppearance.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -170,24 +176,56 @@ export class MyScene extends CGFscene {
         else console.error("this.myCubeMap is null");
     }
 
-    turn(val){
-        // console.log("Orientation: ", this.myMovingObject.orientation);
-        this.myMovingObject.orientation += val;
+    turn(val) {
+        // this.myMovingObject.orientation += val;
+        this.myMovingFish.orientation += val;
+
+        if (val < 0) this.myMovingFish.turningLeft = true;
+        else this.myMovingFish.turningRight = true;
     }
 
-    accelerate(val){
-        // console.log("Speed: ", this.myMovingObject.speed);
-        this.myMovingObject.speed += val;
+    accelerate(val) {
+        //this.myMovingObject.speed += val;
         
-        if(this.myMovingObject.speed < 0){
+        /* if(this.myMovingObject.speed < 0){
             this.myMovingObject.speed = 0;
+        }*/
+
+        this.myMovingFish.speed += val;
+        if (this.myMovingFish.speed < 0) {
+            this.myMovingFish.speed = 0;
+        }
+        if (this.myMovingFish.speed > 5.0) {
+            this.myMovingFish.speed = 5.0;
+        }
+    }
+
+    moveUp() {
+
+        if (this.myMovingFish.position[1] + this.myMovingFish.verticalSpeed < this.upperBound - this.myMovingFish.fishScaleFactor) {
+            this.myMovingFish.position[1] += this.myMovingFish.verticalSpeed;
+        } else {
+            this.myMovingFish.position[1] = this.upperBound - this.myMovingFish.fishScaleFactor;
+        }
+    }
+
+    moveDown() {
+
+        if (this.myMovingFish.position[1] - this.myMovingFish.verticalSpeed > this.lowerBound + this.myMovingFish.fishScaleFactor) {
+            this.myMovingFish.position[1] -= this.myMovingFish.verticalSpeed;
+        } else {
+            this.myMovingFish.position[1] = this.lowerBound + this.myMovingFish.fishScaleFactor;
         }
     }
 
     reset(){
+        /*
         this.myMovingObject.speed = 0;
         this.myMovingObject.orientation = 0;
         this.myMovingObject.position = [0, 0, 0];
+        */
+        this.myMovingFish.reset(this.myRockSet);
+        
     }
 
     checkKeys(){
@@ -199,42 +237,64 @@ export class MyScene extends CGFscene {
             text += " W ";
             keysPressed = true;
             this.accelerate(0.1);
+            
         }
 
         if(this.gui.isKeyPressed("KeyS")) {
             text += " S ";
             keysPressed = true;
-            if(this.myMovingObject.speed > 0)
+            /*if(this.myMovingObject.speed > 0)
+                this.accelerate(-0.1);*/
+            if (this.myMovingFish.speed > 0) {
                 this.accelerate(-0.1);
+            }
         }
 
         if(this.gui.isKeyPressed("KeyA")) {
             text += " A ";
             keysPressed = true;
             this.turn(-0.1);
-        }
-
-        if(this.gui.isKeyPressed("KeyD")) {
+        } 
+        else if(this.gui.isKeyPressed("KeyD")) {
             text += " D ";
             keysPressed = true;
             this.turn(0.1);
+        }
+        else {
+            this.myMovingFish.turningLeft = false;
+            this.myMovingFish.turningRight = false;
         }
 
         if(this.gui.isKeyPressed("KeyR")) {
             this.reset();
         }
+
+        if (this.gui.isKeyPressed("KeyP")) {
+            this.moveUp();
+        }
+
+        if (this.gui.isKeyPressed("KeyL")) {
+            this.moveDown();
+        }
+
+        if (this.gui.isKeyPressed("KeyC")) {
+            // apanhar pedra
+            this.myMovingFish.handleRock(this.myRockSet, this.lowerBound, this.upperBound, this.nestPosition);
+        }
     }
 
     // Update speed factor attribute of Objects
     onSpeedFactorChange = () => {
-        this.myMovingObject.speedFactor = this.speedFactor;
+        // this.myMovingObject.speedFactor = this.speedFactor;
+        this.myMovingFish.speedFactor = this.speedFactor;
     }
 
     // called periodically (as per setUpdatePeriod() in init())
     update(t){
         this.checkKeys();
         this.myMovingObject.update();
-        this.myFish.update();
+        // this.myFish.update();
+        this.myMovingFish.updateMovingFish(this.myRockSet, this.lowerBound);
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 
@@ -283,35 +343,11 @@ export class MyScene extends CGFscene {
         if (this.displayAxis)
             this.axis.display();
 
-        // DRAW MOVING OBJECT
+        // DRAW BASIC (TRIANGLE) MOVING OBJECT 
         this.pushMatrix();
 
-        var rotateMovingObject = [
-            Math.cos(this.myMovingObject.orientation), 0, -Math.sin(this.myMovingObject.orientation), 0,
-            0, 1, 0, 0,
-            Math.sin(this.myMovingObject.orientation), 0, Math.cos(this.myMovingObject.orientation), 0,
-            0, 0, 0, 1
-        ];
-
-        var translateMovingObject = [
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            this.myMovingObject.position[0], this.myMovingObject.position[1], this.myMovingObject.position[2], 1
-        ];
-
-        var scaleMovingObject = [
-            this.scaleFactor, 0, 0, 0,
-            0, this.scaleFactor, 0, 0,
-            0, 0, this.scaleFactor, 0,
-            0, 0, 0, 1,
-        ];
-
-        this.multMatrix(translateMovingObject);
-        this.multMatrix(rotateMovingObject);
-        this.multMatrix(scaleMovingObject);
-
         // this.myMovingObject.display();
+
         this.popMatrix();
 
         // DRAW CYLINDER
@@ -365,7 +401,7 @@ export class MyScene extends CGFscene {
         this.multMatrix(scaleFish);
         this.multMatrix(translateFish)
         
-        this.myFish.display();
+        // this.myFish.display();
 
         this.popMatrix();
 
@@ -420,6 +456,13 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
 
         this.myPlantSet.display();
+
+        this.popMatrix();
+
+        // DRAW MOVING FISH
+        this.pushMatrix();
+
+        this.myMovingFish.display();
 
         this.popMatrix();
 

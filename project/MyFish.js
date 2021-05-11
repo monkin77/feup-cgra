@@ -14,11 +14,6 @@ export class MyFish extends CGFobject {
         this.initTextures(scene);
         this.initMaterials(scene);
         this.initShaders(scene);
-
-        this.speed = 0.0;
-        this.speedFactor = 1.0;
-        this.position = [0.0, 0.0, 0.0];
-        this.orientation = 0.0;
     }
 
     init(scene){
@@ -29,11 +24,12 @@ export class MyFish extends CGFobject {
         this.rightFin = new MyTriangleSmall(scene);
         this.leftFin = new MyTriangleSmall(scene);
         this.dorsalFin = new MyTriangleSmall(scene);
-        console.log("scene: ", this.scene);
 
         this.tailInclination = 0;
         this.maxTailInclination = 20 * Math.PI / 180;
-        this.tailIncrement = (this.maxTailInclination / 20) * 4;    // 20 -> refresh rate | 4 -> number of moves per second
+        
+        this.defaultTailIncrement = (this.maxTailInclination / 20) * 4;    // 20 -> refresh rate | 4 -> number of moves per second
+        this.tailIncrement = this.defaultTailIncrement;
 
         this.finsInclination = 0;
         this.maxFinsInclination = 20 * Math.PI / 180;
@@ -74,19 +70,27 @@ export class MyFish extends CGFobject {
         this.eyeShader = new CGFshader(this.scene.gl, "shaders/fishEyeShader.vert", "shaders/fishEyeShader.frag");
     }
 
-    update = () => {
+    update = (speed = 0) => {
+
+        let prevIncrement = this.tailIncrement;
+
+        this.tailIncrement = 2 * speed * Math.PI / 180 + this.defaultTailIncrement;
+        
+        if (prevIncrement < 0) this.tailIncrement *= -1;
+
         if(Math.abs(this.tailInclination + this.tailIncrement) > this.maxTailInclination){
             this.tailIncrement *= -1;
         }
+
         if(Math.abs(this.finsInclination + this.finsIncrement) > this.maxFinsInclination){
             this.finsIncrement *= -1;
         }
 
-        this.tailInclination += this.tailIncrement; 
+        this.tailInclination += this.tailIncrement;
         this.finsInclination += this.finsIncrement;
     }
 
-    display(){
+    display(turningRight, turningLeft) {
         // Draw Body
         this.scene.pushMatrix();  //push Identity Matrix
 
@@ -298,7 +302,9 @@ export class MyFish extends CGFobject {
         this.scene.multMatrix(translateRightFin);
         this.scene.multMatrix(scaleFin);
         this.scene.multMatrix(invertTranlationToOrigin);
-        this.scene.multMatrix(rotateFinAnimation);
+        
+        if (!turningRight) this.scene.multMatrix(rotateFinAnimation);
+        
         this.scene.multMatrix(translateFinToOrigin);
         this.scene.multMatrix(rotateFinAroundX);
         this.scene.multMatrix(rotateFinAroundZ);
@@ -320,11 +326,20 @@ export class MyFish extends CGFobject {
             0, 0, 0, 1
         ];
 
+        rotateFinAnimation = [
+            Math.cos(this.finsInclination), Math.sin(this.finsInclination), 0, 0,
+            -Math.sin(this.finsInclination), Math.cos(this.finsInclination), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1
+        ];
+
         this.scene.multMatrix(scaleFinToInvert);
         this.scene.multMatrix(translateRightFin);
         this.scene.multMatrix(scaleFin);
         this.scene.multMatrix(invertTranlationToOrigin);
-        this.scene.multMatrix(rotateFinAnimation);
+        
+        if (!turningLeft) this.scene.multMatrix(rotateFinAnimation);
+        
         this.scene.multMatrix(translateFinToOrigin);
         this.scene.multMatrix(rotateFinAroundX);
         this.scene.multMatrix(rotateFinAroundZ);
@@ -356,14 +371,4 @@ export class MyFish extends CGFobject {
         this.scene.popMatrix();
     }
 
-    update(){        
-        let directionVector = [0.0, 0.0, 0.0];
-
-        directionVector[0] = Math.sin(this.orientation) * this.speed * this.speedFactor;
-        directionVector[2] = Math.cos(this.orientation) * this.speed * this.speedFactor;
-
-        this.position[0] = this.position[0] + directionVector[0];
-        this.position[1] = this.position[1] + directionVector[1];
-        this.position[2] = this.position[2] + directionVector[2];
-    }
 }
