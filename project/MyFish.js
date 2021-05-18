@@ -8,12 +8,12 @@ import { MyTriangleSmall } from './MyTriangleSmall.js';
  * @param scene - Reference to MyScene object
  */
 export class MyFish extends CGFobject {
-    constructor(scene){
+    constructor(scene, bodyShader, bodyTexture){
         super(scene);
         this.init(scene);
-        this.initTextures(scene);
+        this.initTextures(scene, bodyTexture);
         this.initMaterials(scene);
-        this.initShaders(scene);
+        this.initShaders(scene, bodyShader);
     }
 
     init(scene){
@@ -36,8 +36,8 @@ export class MyFish extends CGFobject {
         this.finsIncrement = (this.maxFinsInclination / 20) * 3;    // 20 -> refresh rate | 4 -> number of moves per second
     }
 
-    initTextures(scene){
-        this.bodyTexture = new CGFtexture(scene, 'images/fish_img/fishScales1.jpg');
+    initTextures(scene, bodyTexture){
+        this.bodyTexture = bodyTexture;
     }
 
     initMaterials(scene){
@@ -65,8 +65,8 @@ export class MyFish extends CGFobject {
         this.bodyMaterial.setTexture(this.bodyTexture);
     }
 
-    initShaders(scene){
-        this.bodyShader = new CGFshader(this.scene.gl, "shaders/fishBodyShader.vert", "shaders/fishBodyShader.frag");
+    initShaders(scene, bodyShader) {
+        this.bodyShader = bodyShader;
         this.eyeShader = new CGFshader(this.scene.gl, "shaders/fishEyeShader.vert", "shaders/fishEyeShader.frag");
     }
 
