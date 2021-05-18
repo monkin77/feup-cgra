@@ -313,7 +313,7 @@ export class MyScene extends CGFscene {
 
         // Update animated fishes
         for(let i = 0; i < this.animatedFishes.length; i++){
-            this.animatedFishes[i].update();
+            this.animatedFishes[i].updateAnimatedFish();
         }
 
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
