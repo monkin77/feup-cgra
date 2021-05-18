@@ -15,7 +15,7 @@ export class MyAnimatedFish extends MyMovingObject {
 
         this.radius = radius;
         this.center = center;
-        this.orientationSpeed = 2*Math.PI / (period * 20);  // 20 -> fps
+        this.orientationSpeed = - 2*Math.PI / (period * 20);  // 20 -> fps
     }
 
     update() {
@@ -31,6 +31,16 @@ export class MyAnimatedFish extends MyMovingObject {
         this.orientation += this.orientationSpeed;
     }
 
+    /**
+     * Orientation is relative to Z axis, However the fish's
+     * initial angle is looking at the x axis.
+     * Example: Initial Position (0, 0, z) and the fish is looking towards (infinite, 0, 0) 
+     * @returns pilotAngle
+     */
+    getPilotAngle() {
+        return this.orientation - Math.PI/2;
+    }
+
     updateAnimatedFish() {
         this.fish.update(this.speed);
         this.update();
@@ -43,9 +53,8 @@ export class MyAnimatedFish extends MyMovingObject {
 
         // console.log(this.position);
 
-        this.scene.translate(this.position[0], this.position[1], this.position[2]);     // I don't know why this working. (Thought it should be position - center)
-        this.scene.rotate(this.orientation, 0, 1, 0);
-        this.scene.translate(this.center[0], this.center[1], this.center[2]);   // Rotating relative to the center
+        this.scene.translate(this.position[0], this.position[1], this.position[2]); 
+        this.scene.rotate(this.getPilotAngle(), 0, 1, 0);
         this.scene.scale(this.scene.scaleFactor, this.scene.scaleFactor, this.scene.scaleFactor);
         this.scene.scale(this.fishScaleFactor, this.fishScaleFactor, this.fishScaleFactor);
 
