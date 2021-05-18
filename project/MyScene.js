@@ -101,8 +101,11 @@ export class MyScene extends CGFscene {
         let randomY = 1 + Math.random() * 2;
         let randomZ = Math.random() * 15;
         this.animatedFishes = [
+            /*
             new MyAnimatedFish(this, [-5.0, 2.5 , -5.0], 5, 5),
-            new MyAnimatedFish(this, [-7.5, 2.5 , 5.0], 5, 5),   /* 2nd Fish not working */
+            new MyAnimatedFish(this, [-7.5, 2.5 , 5.0], 5, 5),   */
+            new MyAnimatedFish(this, [randomX, randomY, randomZ], 5, 5),
+            new MyAnimatedFish(this, [-randomX, randomY, -randomZ], 5, 3),
         ]
 
         this.myPillars = [ 
