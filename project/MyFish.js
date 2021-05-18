@@ -90,7 +90,7 @@ export class MyFish extends CGFobject {
         this.finsInclination += this.finsIncrement;
     }
 
-    display(turningRight, turningLeft) {
+    display(turningRight = false, turningLeft = false) {
         // Draw Body
         this.scene.pushMatrix();  //push Identity Matrix
 

@@ -11,6 +11,7 @@ import { MyRockSet } from "./MyRockSet.js";
 import { MyPillar } from "./MyPillar.js";
 import { MyPlantSet } from "./MyPlantSet.js";
 import { MyMovingFish } from "./MyMovingFish.js";
+import { MyAnimatedFish } from "./MyAnimatedFish.js";
 
 /**
 * MyScene
@@ -93,6 +94,11 @@ export class MyScene extends CGFscene {
         this.myWaterSurface = new MyPlane(this, 200);
 
         this.myMovingFish = new MyMovingFish(this);
+
+        this.animatedFishes = [
+            new MyAnimatedFish(this, [-5.0, 2.5 , -5.0], 5, 5),
+            // new MyAnimatedFish(this, [-7.5, 2.5 , 5.0], 5, 5),   /* 2nd Fish not working */
+        ]
 
         this.myPillars = [ 
             new MyPillar(this, 100, {x: 5, y: 0, z: 0}),
@@ -296,6 +302,12 @@ export class MyScene extends CGFscene {
         this.myMovingObject.update();
         // this.myFish.update();
         this.myMovingFish.updateMovingFish(this.myRockSet, this.nestPosition);
+
+        // Update animated fishes
+        for(let i = 0; i < this.animatedFishes.length; i++){
+            this.animatedFishes[i].update();
+        }
+
         this.waterSurfaceShader.setUniformsValues({offset: t % 10000});
     }
 
@@ -466,6 +478,15 @@ export class MyScene extends CGFscene {
         this.myMovingFish.display();
 
         this.popMatrix();
+
+        // DRAW ANIMATED FISHES
+        for(let i = 0; i < this.animatedFishes.length; i++){
+            this.pushMatrix();
+
+            this.animatedFishes[i].display();
+
+            this.popMatrix();
+        }
 
     }
 
