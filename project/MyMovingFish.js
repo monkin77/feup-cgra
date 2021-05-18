@@ -1,3 +1,5 @@
+import { CGFtexture, CGFshader } from "../lib/CGF.js";
+
 import { MyFish } from './MyFish.js';
 import { MyMovingObject } from './MyMovingObject.js';
 /**
@@ -10,7 +12,9 @@ export class MyMovingFish extends MyMovingObject {
     constructor(scene){
         super(scene);
 
-        this.fish = new MyFish(scene);
+        this.fish = new MyFish(scene, 
+                    new CGFshader(this.scene.gl, "shaders/fishBodyShader.vert", "shaders/fishBodyShader.frag"),
+                    new CGFtexture(scene, 'images/fish_img/fishScales1.jpg'));
         this.fishScaleFactor = 1 /*0.25*/;
 
         this.turningRight = false;

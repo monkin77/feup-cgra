@@ -1,4 +1,6 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture, CGFshader } from "../lib/CGF.js";
+import { CGFcamera2 } from "./CGFCamera2.js";
+
 import { MyMovingObject } from "./MyMovingObject.js";
 import { MySphere } from "./MySphere.js";
 import { MyCubeMap } from "./MyCubeMap.js";
@@ -97,7 +99,7 @@ export class MyScene extends CGFscene {
 
         this.animatedFishes = [
             new MyAnimatedFish(this, [-5.0, 2.5 , -5.0], 5, 5),
-            // new MyAnimatedFish(this, [-7.5, 2.5 , 5.0], 5, 5),   /* 2nd Fish not working */
+            new MyAnimatedFish(this, [-7.5, 2.5 , 5.0], 5, 5),   /* 2nd Fish not working */
         ]
 
         this.myPillars = [ 
@@ -167,7 +169,7 @@ export class MyScene extends CGFscene {
     }
     
     initCameras() {
-        this.camera = new CGFcamera(1.75, 0.1, 500, vec3.fromValues(2, 2, 2), vec3.fromValues(0, 2, 0));
+        this.camera = new CGFcamera2(1.75, 0.1, 500, vec3.fromValues(2, 2, 2), vec3.fromValues(0, 2, 0));
     }
 
     setDefaultAppearance() {
