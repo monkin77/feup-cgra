@@ -30,7 +30,7 @@ export class MyMovingFish extends MyMovingObject {
         this.totalThrowingTime = 0;
 
         this.currentNestAngle = 0;
-        this.nestAngleIncrement = 180 * Math.PI / 180;
+        this.nestAngleIncrement = 72 * Math.PI / 180;
         this.nestYOffset = 0;
         this.nestYOffsetIncrement = 0.25;   
 

@@ -94,11 +94,11 @@ export class MyScene extends CGFscene {
         this.myRockSet = new MyRockSet(this, 32, 16, 100, this.nestPosition);   
         this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
         this.myWaterSurface = new MyPlane(this, 200);
-
+        
         this.myMovingFish = new MyMovingFish(this);
 
         let randomX = Math.random() * 15;
-        let randomY = 1 + Math.random() * 2;
+        let randomY = 1.5 + Math.random() * 5;
         let randomZ = Math.random() * 15;
         this.animatedFishes = [
             /*
@@ -244,19 +244,16 @@ export class MyScene extends CGFscene {
     }
 
     checkKeys(){
-        var text = "Keys pressed: ";
         var keysPressed = false;
 
         // Check for key codes e.g. in https://keycode.info/
         if(this.gui.isKeyPressed("KeyW")){
-            text += " W ";
             keysPressed = true;
             this.accelerate(0.1);
             
         }
 
         if(this.gui.isKeyPressed("KeyS")) {
-            text += " S ";
             keysPressed = true;
             /*if(this.myMovingObject.speed > 0)
                 this.accelerate(-0.1);*/
@@ -266,12 +263,10 @@ export class MyScene extends CGFscene {
         }
 
         if(this.gui.isKeyPressed("KeyA")) {
-            text += " A ";
             keysPressed = true;
             this.turn(-0.1);
         } 
         else if(this.gui.isKeyPressed("KeyD")) {
-            text += " D ";
             keysPressed = true;
             this.turn(0.1);
         }
@@ -351,7 +346,6 @@ export class MyScene extends CGFscene {
             this.camera.position[0], this.camera.position[1], this.camera.position[2], 1
         ]
         
-        // console.log("Cam position:", this.camera.position);
 
         this.multMatrix(translateToCamera);  
         this.multMatrix(scaleCubeMap);
