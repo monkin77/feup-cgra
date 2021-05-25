@@ -108,7 +108,7 @@ export class MyMovingFish extends MyMovingObject {
                 this.initialRockPosition = null;
             }
         }
-        else if (this.position[1] + this.fishScaleFactor == upperBound && distance >= nestPosition.radius - 1 ) {
+        else if (this.position[1] + this.fishScaleFactor == upperBound && distance >= nestPosition.radius) {
             this.initialThrowingPosition = rockSet.rocksPosition[this.grabbedRockIndex];
 
             let t = 20 * 3;  // FPS * seconds

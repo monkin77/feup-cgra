@@ -26,7 +26,7 @@ export class MyFish extends CGFobject {
         this.dorsalFin = new MyTriangleSmall(scene);
 
         this.tailInclination = 0;
-        this.maxTailInclination = 20 * Math.PI / 180;
+        this.maxTailInclination = 35 * Math.PI / 180;
         
         this.defaultTailIncrement = (this.maxTailInclination / 20) * 4;    // 20 -> refresh rate | 4 -> number of moves per second
         this.tailIncrement = this.defaultTailIncrement;
