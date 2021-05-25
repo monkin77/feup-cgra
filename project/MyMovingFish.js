@@ -46,8 +46,8 @@ export class MyMovingFish extends MyMovingObject {
 
             let directionVector = [0.0, 0.0, 0.0];
 
-            directionVector[0] = Math.sin(this.orientation);
-            directionVector[2] = Math.cos(this.orientation);
+            directionVector[0] = Math.sin(this.orientation) * this.scene.scaleFactor;
+            directionVector[2] = Math.cos(this.orientation) * this.scene.scaleFactor;
 
             result = [this.position[0] + directionVector[0], 
                         this.position[1] + directionVector[1] - 0.2, 
