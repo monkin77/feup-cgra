@@ -181,6 +181,7 @@ export class MyMovingFish extends MyMovingObject {
         rockSet.rocksPosition[this.grabbedRockIndex] = this.initialRockPosition;
         this.grabbedRockIndex = null;
         this.initialRockPosition = null;
+        this.throwingRock = false;
     }
 
     display() {
