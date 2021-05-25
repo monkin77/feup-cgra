@@ -117,7 +117,7 @@ export class MyScene extends CGFscene {
             new MyPillar(this, 100, {x: 21, y: 0, z: 5}),
         ];
 
-        this.myPlantSet = new MyPlantSet(this, 4, 50, this.nestPosition)
+        this.myPlantSet = new MyPlantSet(this, 10, 50, this.nestPosition)
 
         this.waterSurfaceShader = new CGFshader(this.gl, "shaders/waterSurface.vert", "shaders/waterSurface.frag");
         this.waterSurfaceShader.setUniformsValues( {uSampler2: 1, offset: 0} );		// The uSampler is already sent by default

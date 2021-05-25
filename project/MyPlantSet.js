@@ -5,9 +5,9 @@ export class MyPlantSet extends CGFobject {
   /**
    * @method constructor
    * @param  {CGFscene} scene - MyScene object
-   * @param  {integer} slices - number of slices around Y axis
+   * @param  {integer} maxSlices - number of maxSlices around Y axis
    */
-  constructor(scene, slices, numPlants, nestPosition) {
+  constructor(scene, maxSlices, numPlants, nestPosition) {
     super(scene);
 
     this.nestPosition = nestPosition;
@@ -17,14 +17,14 @@ export class MyPlantSet extends CGFobject {
     this.plantsPosition = [];
     this.plantsReflection = [];
 
-    this.init(scene, slices);
+    this.init(scene, maxSlices);
     this.initMaterials(scene);
   }
 
-  init(scene, slices) {
+  init(scene, maxSlices) {
     for (var i = 0; i < this.numPlants; i++) {
-        
-        this.plants.push(new MyPlant(scene, slices));
+        let currSlices = 1 + Math.random() * maxSlices;
+        this.plants.push(new MyPlant(scene, currSlices));
         
         // Set random Scaling value
         let random = Math.random() / 4 + 0.1;     //a random value between 0.1 - 0.35
