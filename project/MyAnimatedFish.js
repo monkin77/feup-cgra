@@ -33,7 +33,7 @@ export class MyAnimatedFish extends MyMovingObject {
         this.position[1] = this.center[1] + directionVector[1];
         this.position[2] = this.center[2] + directionVector[2];
         
-        this.orientation += this.orientationSpeed;
+        this.orientation += this.orientationSpeed * this.scene.speedFactor;
     }
 
     updateAnimatedFish() {

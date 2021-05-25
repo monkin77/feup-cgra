@@ -21,8 +21,8 @@ export class MyMovingObject extends CGFobject {
     update(){        
         let directionVector = [0.0, 0.0, 0.0];
 
-        directionVector[0] = Math.sin(this.orientation) * this.speed * this.speedFactor;
-        directionVector[2] = Math.cos(this.orientation) * this.speed * this.speedFactor;
+        directionVector[0] = Math.sin(this.orientation) * this.speed * this.scene.speedFactor;
+        directionVector[2] = Math.cos(this.orientation) * this.speed * this.scene.speedFactor;
 
         this.position[0] = this.position[0] + directionVector[0];
         this.position[1] = this.position[1] + directionVector[1];

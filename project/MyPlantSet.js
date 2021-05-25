@@ -23,7 +23,7 @@ export class MyPlantSet extends CGFobject {
 
   init(scene, maxSlices) {
     for (var i = 0; i < this.numPlants; i++) {
-        let currSlices = 1 + Math.random() * maxSlices;
+        let currSlices = 3 + Math.random() * maxSlices;
         this.plants.push(new MyPlant(scene, currSlices));
         
         // Set random Scaling value
@@ -60,13 +60,13 @@ export class MyPlantSet extends CGFobject {
   }
 
   display() {
+    this.plantAppearance.apply();
     for (var i = 0; i < this.numPlants; i++) {
         this.scene.pushMatrix();
         
         // this.plantAppearance.setAmbient(this.plantsReflection, this.plantsReflection, this.plantsReflection, 1);
         // this.plantAppearance.setDiffuse(this.plantsReflection, this.plantsReflection, this.plantsReflection, 1);
         // this.plantAppearance.setSpecular(this.plantsReflection, this.plantsReflection, this.plantsReflection, 1);
-        this.plantAppearance.apply();
 
         let scale = this.plantsScaling[i];
         let randomXPos = this.plantsPosition[i][0];

@@ -91,7 +91,7 @@ export class MyScene extends CGFscene {
         this.myCylinder = new MyCylinder(this, 16);
         this.myFish = new MyFish(this);
         this.myRock = new MyRock(this, 16, 8);
-        this.myRockSet = new MyRockSet(this, 32, 16, 100, this.nestPosition);   
+        this.myRockSet = new MyRockSet(this, 32, 16, 50, this.nestPosition);   
         this.mySeaFloor = new MySeaFloor(this, 100, 50, 1);
         this.myWaterSurface = new MyPlane(this, 200);
         
@@ -101,9 +101,6 @@ export class MyScene extends CGFscene {
         let randomY = 1.5 + Math.random() * 5;
         let randomZ = Math.random() * 15;
         this.animatedFishes = [
-            /*
-            new MyAnimatedFish(this, [-5.0, 2.5 , -5.0], 5, 5),
-            new MyAnimatedFish(this, [-7.5, 2.5 , 5.0], 5, 5),   */
             new MyAnimatedFish(this, [randomX, randomY, randomZ], 5, 5),
             new MyAnimatedFish(this, [-randomX, randomY, -randomZ], 5, 3),
         ]
@@ -291,12 +288,6 @@ export class MyScene extends CGFscene {
             // apanhar pedra
             this.myMovingFish.handleRock(this.myRockSet, this.lowerBound, this.upperBound, this.nestPosition);
         }
-    }
-
-    // Update speed factor attribute of Objects
-    onSpeedFactorChange = () => {
-        // this.myMovingObject.speedFactor = this.speedFactor;
-        this.myMovingFish.speedFactor = this.speedFactor;
     }
 
     // called periodically (as per setUpdatePeriod() in init())
