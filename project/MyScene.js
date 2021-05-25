@@ -69,7 +69,7 @@ export class MyScene extends CGFscene {
         this.arrTextures2 = [this.texture2_1, this.texture2_2, this.texture2_3, this.texture2_4, this.texture2_5, this.texture2_6];
         this.arrTextures3 =  [this.texture3_1, this.texture3_2, this.texture3_3, this.texture3_4, this.texture3_5, this.texture3_6];
         this.myCubeMapTextures = [this.arrTextures, this.arrTextures2, this.arrTextures3];
-        this.myCubeMapTextureSelector = 0;  // variable that chooses the current texture
+        this.myCubeMapTextureSelector = 2;  // variable that chooses the current texture
 
         this.myCubeMapTexturesList = {  // Object interface variables
             'Default': 0,
